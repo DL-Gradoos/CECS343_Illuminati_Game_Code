@@ -21,13 +21,16 @@ public class Main extends StateBasedGame {
 		super(n);
 		this.addState(new Menu(MENU));
 		this.addState(new Options(OPTIONS));
+		//this.addState(new Game(GAME));
 	}
 	
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		this.getState(MENU).init(gc, this);
 		this.getState(OPTIONS).init(gc, this);
+		//this.getState(GAME).init(gc, this);
 		this.enterState(MENU);
+		//this.enterState(GAME);
 	}
 	
 	public static void main(String[] args) {
