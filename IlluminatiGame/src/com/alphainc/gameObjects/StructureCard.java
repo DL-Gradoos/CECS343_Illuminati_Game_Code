@@ -1,7 +1,7 @@
 package com.alphainc.gameObjects;
 
 /**
- * A card that is part of a struture.
+ * Super class for a card that is part of a structure.
  * @author crystalchun
  *
  */
