@@ -66,5 +66,54 @@ public class IlluminatiCard extends StructureCard
 		return super.getTreasury();
 	}
 	
+	public void addMoney(int money)
+	{
+		super.addMoney(money);
+	}
+	
+	public void addIncome()
+	{
+		super.addIncome();
+	}
+	
+	public void removeMoney(int amount)
+	{
+		removeFromBank(amount);
+	}
+	
+	public Arrow[] getArrows()
+	{
+		return super.getArrows();
+	}
+	
+	public boolean hasOpenArrow()
+	{
+		return super.hasOpenArrow();
+	}
+	
+	public Arrow getOpenArrow()
+	{
+		return super.getOpenArrow();
+	}
+	
+	public Arrow getArrow(String location)
+	{
+		return super.getArrow(location);
+	}
+	
+	public void connect(StructureCard card)
+	{
+		super.connect(card);
+	}
+	
+	public void connect(Arrow connectWith, StructureCard card)
+	{
+		super.connect(connectWith, card);
+	}
+	
+	public void connect(Arrow connectTo, Arrow connectWith)
+	{
+		super.connect(connectTo, connectWith);
+	}
 	
 }

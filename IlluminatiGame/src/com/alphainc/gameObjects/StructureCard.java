@@ -154,6 +154,22 @@ public class StructureCard extends Card
 	}
 	
 	/**
+	 * Gets the arrow on this card at a specific location.
+	 * @param location The location of this arrow on this card.
+	 * @return The arrow of this card at the specified location.
+	 */
+	public Arrow getArrow(String location)
+	{
+		for(Arrow a: arrows)
+		{
+			if(a.getLocation().equalsIgnoreCase(location))
+			{
+				return a;
+			}
+		}
+		return null;
+	}
+	/**
 	 * Gets whether or not this card has an open arrow.
 	 * @return True if this card has an open arrow, false otherwise.
 	 */
@@ -201,6 +217,27 @@ public class StructureCard extends Card
 		else
 		{
 			System.out.println("This card does not have any open arrows to connect to.");
+		}
+	}
+	
+	/**
+	 * Connects a specified arrow from this card to another card's
+	 * first open arrow.
+	 * @param connectWith The arrow to connect with.
+	 * @param card The card to connect with.
+	 */
+	public void connect(Arrow connectWith, StructureCard card)
+	{
+		//If the arrow is already connected, gives an error.
+		if(connectWith.isConnected())
+		{
+			System.out.println("Error, this arrow is not opened to connect with.");
+			
+		}
+		else
+		{
+			//Connects this arrow with the next open arrow.
+			connect(connectWith, card.getOpenArrow());
 		}
 	}
 	
