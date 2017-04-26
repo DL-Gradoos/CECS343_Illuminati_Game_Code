@@ -1,5 +1,10 @@
 package com.alphainc.gameObjects;
 
+/**
+ * A generic card object in the Illuminati game.
+ * @author crystalchun
+ *
+ */
 public class Card 
 {
 	/**The boolean variable that says whether or not this card is flipped.*/
@@ -21,5 +26,31 @@ public class Card
 	public Card()
 	{
 		this(false);
+	}
+	
+	/**
+	 * Gets whether or not this card is flipped face-side up.
+	 * @return True if this card is flipped face-side up, false otherwise.
+	 */
+	public boolean isFlipped()
+	{
+		return flipped;
+	}
+	
+	/**
+	 * Flips this card the other way.
+	 */
+	public void flip()
+	{
+		flipped = !flipped;
+	}
+	
+	/**
+	 * Flips this card to the specified way.
+	 * @param flip True if this card is flipped face-side up, false otherwise.
+	 */
+	public void flip(boolean flip)
+	{
+		flipped = flip;
 	}
 }
