@@ -21,7 +21,7 @@ public class IlluminatiCard extends StructureCard
 	public IlluminatiCard(String name, String special, int attackPower, int income, Arrow[] arrows)
 	{
 		//Calls StructureCard constructor
-		super(name, attackPower, income, arrows, true);
+		super(name, attackPower, income, arrows, false);
 		specialPower = special;
 	}
 
