@@ -15,6 +15,8 @@ public class Arrow
 	private boolean connected;
 	/**The arrow this arrow is connected to.*/
 	private Arrow connectedTo;
+	/**The direction the arrow points, true for out, false for in.*/
+	private boolean direction;
 	
 	/**
 	 * Constructor for an arrow object.
@@ -22,22 +24,25 @@ public class Arrow
 	 * @param card The card this arrow is located on.
 	 * @param connected Whether or not the arrow is connected to something else.
 	 * @param connectedTo The arrow it is connecting to.
+	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
 	 */
-	public Arrow(String location, StructureCard card, boolean connected, Arrow connectedTo)
+	public Arrow(String location, StructureCard card, boolean connected, Arrow connectedTo, boolean direction)
 	{
 		this.location = location;
 		this.card = card;
 		this.connected = connected;
 		this.connectedTo = connectedTo;
+		this.direction = direction;
 	}
 	/**
 	 * Overloaded constructor for this arrow. The arrow is unconnected by default.
 	 * @param location The location of this arrow on a card.
 	 * @param card The card this arrow is located on.
+	 * @param direction The direction the arrow the points, true for out, false for in.
 	 */
-	public Arrow(String location, StructureCard card)
+	public Arrow(String location, StructureCard card, boolean direction)
 	{
-		this(location, card, false, null);
+		this(location, card, false, null, direction);
 	}
 	
 	/**
@@ -49,6 +54,7 @@ public class Arrow
 		connectedTo = connection;
 		connected = true;
 	}
+
 	
 	/**
 	 * Removes the connection.
@@ -102,5 +108,10 @@ public class Arrow
 	public StructureCard getCardConnectedTo()
 	{
 		return connectedTo.getCard();
+	}
+	
+	public boolean getDirection()
+	{
+		return direction;
 	}
 }
