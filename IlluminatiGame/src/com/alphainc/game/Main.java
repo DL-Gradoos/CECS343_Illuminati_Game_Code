@@ -5,6 +5,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.alphainc.gameObjects.GroupCard;
+
 public class Main extends StateBasedGame {
 	
 	public static final String NAME = "Illuminati, The Game";

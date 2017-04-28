@@ -9,6 +9,8 @@ public class StructureCard extends Card
 {
 	/**The name of the card.*/
 	private String name;
+	/**The special this card has.*/
+	private String special;
 	/**The attack power of this card.*/
 	private int attackPower;
 	/**The amount of transferable power this card has.*/
@@ -25,6 +27,7 @@ public class StructureCard extends Card
 	/**
 	 * The main constructor for a structure card object.
 	 * @param name The name of this card.
+	 * @param special The special this card has.
 	 * @param attackPower The attack power of this card.
 	 * @param resistance The resistance this card has.
 	 * @param income The income this card gets. 
@@ -32,11 +35,12 @@ public class StructureCard extends Card
 	 * @param flipped Whether or not this card is flipped over.
 	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income, int transferable)
+	public StructureCard(String name, String special, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income, int transferable)
 	{
 		//Calls Card constructor
 		super(flipped);
 		this.name = name;
+		this.special = special;
 		this.attackPower = attackPower;
 		this.resistance = resistance;
 		this.income = income;
@@ -48,43 +52,46 @@ public class StructureCard extends Card
 	/**
 	 * Overloaded constructor for when this card is automatically not flipped over.
 	 * @param name The name of the card.
+	 * @param special The special this card has.
 	 * @param attackPower The attack power this card has.
 	 * @param resistance The resistance this card has.
 	 * @param income The income this card gets.
 	 * @param arrows The arrows on this card.
 	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, int attackPower, int resistance, int income, Arrow[] arrows, int transferable)
+	public StructureCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, int transferable)
 	{
-		this(name, attackPower, false, resistance, arrows, income, transferable);
+		this(name, special, attackPower, false, resistance, arrows, income, transferable);
 	}
 	
 	/**
 	 * Overloaded constructor for a structure card with no resistance.
 	 * @param transferrable The amount of transferable power this card has.
 	 * @param name The name of this card.
+	 * @param special The special this card has.
 	 * @param attackPower The amount of attack power this card has.
 	 * @param income The income this card gets.
 	 * @param arrows The arrows this card has.
 	 * @param flipped Whether or not this card is flipped over.
 	 */
-	public StructureCard(int transferable, String name, int attackPower, int income, Arrow[] arrows, boolean flipped)
+	public StructureCard(int transferable, String name, String special, int attackPower, int income, Arrow[] arrows, boolean flipped)
 	{
-		this(name, attackPower, false, 0, arrows, income, transferable);
+		this(name, special, attackPower, false, 0, arrows, income, transferable);
 	}
 	
 	/**
-	 * Overloaded constructor for when this card has no transferrable power.
+	 * Overloaded constructor for when this card has no transferable power.
 	 * @param name The name of the card.
+	 * @param special The special this card has.
 	 * @param attackPower The attack power this card has.
 	 * @param resistance The resistance this card has.
 	 * @param income The income this card gets.
 	 * @param arrows The arrows on this card.
 	 * @param flipped Whether or not this card is flipped over.
 	 */
-	public StructureCard(String name, int attackPower, int resistance, int income, Arrow[] arrows, boolean flipped)
+	public StructureCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, boolean flipped)
 	{
-		this(name, attackPower, false, resistance, arrows, income, 0);
+		this(name, special, attackPower, false, resistance, arrows, income, 0);
 	}
 	
 	/**
@@ -321,5 +328,10 @@ public class StructureCard extends Card
 	public void flip(boolean flip)
 	{
 		super.flip(flip);
+	}
+	
+	public String getSpecial()
+	{
+		return special;
 	}
 }
