@@ -21,7 +21,7 @@ public class IlluminatiCard extends StructureCard
 	public IlluminatiCard(String name, String special, int attackPower, int income, Arrow[] arrows)
 	{
 		//Calls StructureCard constructor
-		super(name, attackPower, income, arrows, false);
+		super(attackPower, name, attackPower, income, arrows, false);
 		specialPower = special;
 	}
 
@@ -86,17 +86,21 @@ public class IlluminatiCard extends StructureCard
 		return super.getArrows();
 	}
 	
-	public boolean hasOpenArrow()
+	public boolean hasOpenOutArrow()
 	{
-		return super.hasOpenArrow();
+		return super.hasOpenOutArrow();
 	}
 	
-	public Arrow getOpenArrow()
+	/**
+	 * Gets the next open outward-facing arrow
+	 * @return The next open outward-facing arrow
+	 */
+	public Arrow getOpenOutArrow()
 	{
-		return super.getOpenArrow();
+		return super.getOpenOutArrow();
 	}
 	
-	public Arrow getArrow(String location)
+	public Arrow getArrow(int location)
 	{
 		return super.getArrow(location);
 	}

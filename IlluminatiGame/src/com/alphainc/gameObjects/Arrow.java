@@ -7,8 +7,6 @@ package com.alphainc.gameObjects;
  */
 public class Arrow 
 {
-	/**The location of the arrow on a card.*/
-	private String location;
 	/**The card this arrow is on.*/
 	private StructureCard card;
 	/**Whether or not this arrow is connected to anything.*/
@@ -26,9 +24,8 @@ public class Arrow
 	 * @param connectedTo The arrow it is connecting to.
 	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
 	 */
-	public Arrow(String location, StructureCard card, boolean connected, Arrow connectedTo, boolean direction)
+	public Arrow(StructureCard card, boolean connected, Arrow connectedTo, boolean direction)
 	{
-		this.location = location;
 		this.card = card;
 		this.connected = connected;
 		this.connectedTo = connectedTo;
@@ -40,9 +37,9 @@ public class Arrow
 	 * @param card The card this arrow is located on.
 	 * @param direction The direction the arrow the points, true for out, false for in.
 	 */
-	public Arrow(String location, StructureCard card, boolean direction)
+	public Arrow(StructureCard card, boolean direction)
 	{
-		this(location, card, false, null, direction);
+		this(card, false, null, direction);
 	}
 	
 	/**
@@ -64,16 +61,7 @@ public class Arrow
 		connected = false;
 		connectedTo = null;
 	}
-	
-	/**
-	 * Gets the location on the card where this arrow is.
-	 * @return The location on the card where this arrow is.
-	 */
-	public String getLocation()
-	{
-		return location;
-	}
-	
+
 	/**
 	 * Gets the card this arrow is on.
 	 * @return The card this arrow is on.
@@ -110,6 +98,10 @@ public class Arrow
 		return connectedTo.getCard();
 	}
 	
+	/**
+	 * Gets which way this arrow is facing, true for out, false for in.
+	 * @return True if this arrow faces out, false if this arrow is facing inward.
+	 */
 	public boolean getDirection()
 	{
 		return direction;

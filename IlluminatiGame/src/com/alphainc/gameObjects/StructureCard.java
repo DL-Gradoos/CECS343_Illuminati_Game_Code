@@ -11,6 +11,8 @@ public class StructureCard extends Card
 	private String name;
 	/**The attack power of this card.*/
 	private int attackPower;
+	/**The amount of transferable power this card has.*/
+	private int transferablePower;
 	/**The resistance of this card.*/
 	private int resistance;
 	/**The income of this card.*/
@@ -28,8 +30,9 @@ public class StructureCard extends Card
 	 * @param income The income this card gets. 
 	 * @param arrows The arrows on this card.
 	 * @param flipped Whether or not this card is flipped over.
+	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income)
+	public StructureCard(String name, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income, int transferable)
 	{
 		//Calls Card constructor
 		super(flipped);
@@ -39,6 +42,7 @@ public class StructureCard extends Card
 		this.income = income;
 		this.treasury = 0;
 		this.arrows = arrows;
+		this.transferablePower = transferable;
 	}
 	
 	/**
@@ -48,23 +52,39 @@ public class StructureCard extends Card
 	 * @param resistance The resistance this card has.
 	 * @param income The income this card gets.
 	 * @param arrows The arrows on this card.
+	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, int attackPower, int resistance, int income, Arrow[] arrows)
+	public StructureCard(String name, int attackPower, int resistance, int income, Arrow[] arrows, int transferable)
 	{
-		this(name, attackPower, false, resistance, arrows, income);
+		this(name, attackPower, false, resistance, arrows, income, transferable);
 	}
 	
 	/**
 	 * Overloaded constructor for a structure card with no resistance.
+	 * @param transferrable The amount of transferable power this card has.
 	 * @param name The name of this card.
 	 * @param attackPower The amount of attack power this card has.
 	 * @param income The income this card gets.
 	 * @param arrows The arrows this card has.
 	 * @param flipped Whether or not this card is flipped over.
 	 */
-	public StructureCard(String name, int attackPower, int income, Arrow[] arrows, boolean flipped)
+	public StructureCard(int transferable, String name, int attackPower, int income, Arrow[] arrows, boolean flipped)
 	{
-		this(name, attackPower, false, 0, arrows, income);
+		this(name, attackPower, false, 0, arrows, income, transferable);
+	}
+	
+	/**
+	 * Overloaded constructor for when this card has no transferrable power.
+	 * @param name The name of the card.
+	 * @param attackPower The attack power this card has.
+	 * @param resistance The resistance this card has.
+	 * @param income The income this card gets.
+	 * @param arrows The arrows on this card.
+	 * @param flipped Whether or not this card is flipped over.
+	 */
+	public StructureCard(String name, int attackPower, int resistance, int income, Arrow[] arrows, boolean flipped)
+	{
+		this(name, attackPower, false, resistance, arrows, income, 0);
 	}
 	
 	/**
@@ -138,14 +158,30 @@ public class StructureCard extends Card
 	}
 	
 	/**
-	 * Gets the first open arrow.
-	 * @return The first open arrow this card has or null if there are no open arrows.
+	 * Gets the first open out arrow.
+	 * @return The first open outward-facing arrow this card has or null if there are no open arrows.
 	 */
-	public Arrow getOpenArrow()
+	public Arrow getOpenOutArrow()
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected())
+			if(!a.isConnected() && a.getDirection())
+			{
+				return a;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets the first open in arrow.
+	 * @return The first open inward-facing arrow this card has or null if there are no open arrows.
+	 */
+	public Arrow getOpenInArrow()
+	{
+		for(Arrow a: arrows)
+		{
+			if(!a.isConnected() && !a.getDirection())
 			{
 				return a;
 			}
@@ -158,26 +194,19 @@ public class StructureCard extends Card
 	 * @param location The location of this arrow on this card.
 	 * @return The arrow of this card at the specified location.
 	 */
-	public Arrow getArrow(String location)
+	public Arrow getArrow(int location)
 	{
-		for(Arrow a: arrows)
-		{
-			if(a.getLocation().equalsIgnoreCase(location))
-			{
-				return a;
-			}
-		}
-		return null;
+		return arrows[location];
 	}
 	/**
 	 * Gets whether or not this card has an open arrow.
 	 * @return True if this card has an open arrow, false otherwise.
 	 */
-	public boolean hasOpenArrow()
+	public boolean hasOpenOutArrow()
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected())
+			if(!a.isConnected() && a.getDirection())
 			{
 				return true;
 			}
@@ -209,10 +238,10 @@ public class StructureCard extends Card
 	 */
 	public void connect(StructureCard card)
 	{
-		if(hasOpenArrow())
+		if(hasOpenOutArrow())
 		{
-			Arrow arrow = getOpenArrow();
-			connect(arrow, card.getOpenArrow());
+			Arrow arrow = getOpenOutArrow();
+			connect(arrow, card.getOpenInArrow());
 		}
 		else
 		{
@@ -237,7 +266,7 @@ public class StructureCard extends Card
 		else
 		{
 			//Connects this arrow with the next open arrow.
-			connect(connectWith, card.getOpenArrow());
+			connect(connectWith, card.getOpenInArrow());
 		}
 	}
 	
@@ -248,10 +277,17 @@ public class StructureCard extends Card
 	 */
 	public void connect(Arrow connectTo, Arrow connectWith)
 	{
-		connectWith.setConnection(connectTo);
-		connectTo.setConnection(connectWith);
+		//Tests if connectWith is an open out arrow and connectTo is an open in arrow
+		if(!connectWith.isConnected() && connectWith.getDirection() && !connectTo.getDirection() && connectTo.isConnected())
+		{
+			connectWith.setConnection(connectTo);
+			connectTo.setConnection(connectWith);
+		}
 	}
-	
+	public int getTransferablePower()
+	{
+		return transferablePower;
+	}
 	/**
 	 * Gets the resistance power this card has.
 	 * @return The resistance power of this card.
