@@ -24,8 +24,6 @@ public class PreGame extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
 		//tf.render(container, g);
-		container.getDefaultFont().drawString(100, 100, "GIACALONE, MORE LIKE JACK ALONE AMIRITE");
-		
 	}
 
 	@Override

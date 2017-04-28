@@ -44,7 +44,6 @@ public class Options extends BasicGameState implements ComponentListener {
 		g.setColor(new Color(1, 1, 1, 1F));
 		//g.fillRect(0, 0, container.getWidth(), container.getHeight());
 		//g.setColor(new Color(0, 0, 0, 1F));
-		//g.drawString("GIACALONE, MORE LIKE JACK ALONE AMIRITE", 100, 100);
 		backButtonMO.render(container, g);
 	}
 
