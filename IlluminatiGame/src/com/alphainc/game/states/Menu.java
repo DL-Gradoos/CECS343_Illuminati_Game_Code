@@ -1,28 +1,17 @@
 package com.alphainc.game.states;
 
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.MouseListener;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
 import com.alphainc.game.Main;
-import com.alphainc.game.PlayerCountSingleton;
-import com.alphainc.game.components.PlayerCounter;
 
 public class Menu extends BasicGameState implements ComponentListener, MouseListener 
 {
@@ -36,13 +25,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	/** Images for Start tile */
 	private Image startGame;
 	/** Allows for highlighting of menu items */
-	private MouseOverArea menuMouseOver[], startGameMouseOver, plusButton, minusButton, startGameButton;
-	/** UNUSED */
-	private AngelCodeFont font;
-	/** UNUSED */
-	private java.awt.Font f;
-	/** UNUSED */
-	private TrueTypeFont x;
+	private MouseOverArea menuMouseOver[], plusButton, minusButton, startGameButton;
 	/** The container the game is in, received from init */
 	private GameContainer container;
 	/** A level (state) of the main game, received from init */
@@ -52,9 +35,6 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	/** Checks for which menu buttons were clicked */
 	private boolean menuButtonsClicked[];
 	private int numPlayers;
-
-	/** Singleton used to transfer data to PLAY state */
-	public static PlayerCountSingleton playerCountData;
 	private Image centerNum[];
 	private boolean start_game_menu, options_menu;
 	private Image minusImage, plusImage;
@@ -73,7 +53,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	{
 		this.container = container;
 		this.game = game;
-		playerCountData = PlayerCountSingleton.getInstance();
+		//playerCountData = PlayerCountSingleton.getInstance();
 		numPlayers = 1;
 
 		try {
@@ -120,15 +100,13 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		startGamePlayerNum = new Image("res/options_menu_c.png").getScaledCopy(0.4F);
 	
 		startGame = new Image("res/go_PLACEHOLDER.png");
-		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
-		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
-		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
+		
+		startGameButton.setNormalColor(new Color(1, 1, 1, 0.5F));
+		startGameButton.setMouseOverColor(new Color(1, 1, 1, 1.0F));
 		
 		/* The frame */
 		optionsMenuFrame = new Image("res/options_menu_c.png").getScaledCopy(0.8F);
 
-		f = new java.awt.Font("Arial", java.awt.Font.BOLD, 36);
-		x = new TrueTypeFont(f, false);
 	}
 
 	@Override
@@ -141,9 +119,6 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 			startGameButton.render(container, g);
 			minusButton.render(container, g);
 			plusButton.render(container, g);
-			startGameMouseOver.render(container, g);
-			
-			//game.enterState(2);
 		}
 		else if (options_menu)
 		{
@@ -264,23 +239,6 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 			menuMouseOver[ii].render(container, g);
 		}
 	}
-	
-/*	*//**
-	 * Initializes the variables needed for creating the mini popup window
-	 * that asks the user for the number of players wanted. Also contains
-	 * buttons to either 1) read the user manual 2) move on to play the game
-	 * or 3) exit from the window.
-	 * 
-	 * @throws SlickException A general exception
-	 *//*
-	private void initStartGame() throws SlickException {
-		startGamePlayerNum = new Image("res/options_menu_c.png").getScaledCopy(0.4F);
-		pc = new PlayerCounter(container, 546, 370, 192, 48);
-		startGame = new Image("res/go_PLACEHOLDER.png");
-		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
-		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
-		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
-	}*/
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
