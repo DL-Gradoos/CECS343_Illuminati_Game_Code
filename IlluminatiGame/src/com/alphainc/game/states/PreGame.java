@@ -1,17 +1,17 @@
-package com.alphainc.game;
+package com.alphainc.game.states;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.TextField;
-import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
-public class Options extends BasicGameState {
+public class PreGame extends BasicGameState {
 	private static int mID;
 	private TextField tf;
 	
-	public Options(int id) {
+	public PreGame(int id) {
 		mID = id;
 	}
 	
@@ -24,8 +24,6 @@ public class Options extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
 		//tf.render(container, g);
-		container.getDefaultFont().drawString(100, 100, "GIACALONE, MORE LIKE JACK ALONE AMIRITE");
-		
 	}
 
 	@Override
