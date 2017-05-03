@@ -1,4 +1,5 @@
 package com.alphainc.gameObjects;
+
 import java.util.ArrayList;
 
 /**
@@ -29,9 +30,9 @@ public class GroupCard extends StructureCard
 	 * @param controlled Whether or not this group is controlled.
 	 * @param transferable The amount of transferable power this card has.
 	 */
-	public GroupCard(String name, String special, int attackPower, boolean flipped, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, boolean controlled, int transferable)
+	public GroupCard(String path, String name, String special, int attackPower, boolean flipped, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, boolean controlled, int transferable)
 	{
-		super(name, special, attackPower, flipped, resistance, arrows, income, transferable);
+		super(path, name, special, attackPower, flipped, resistance, arrows, income, transferable);
 		this.alignments = alignments;
 		this.controlled = controlled;
 	}
@@ -48,9 +49,9 @@ public class GroupCard extends StructureCard
 	 * @param alignments The alignments this card is a part of.
 	 * @param transferable The amount of transferable power this card has.
 	 */
-	public GroupCard(String name, String special, int attackPower, boolean flipped, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, int transferable)
+	public GroupCard(String path, String name, String special, int attackPower, boolean flipped, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, int transferable)
 	{
-		this(name, special, attackPower, flipped, resistance, income, arrows, alignments, false, transferable);
+		this(path, name, special, attackPower, flipped, resistance, income, arrows, alignments, false, transferable);
 	}
 	
 	/**
@@ -64,9 +65,9 @@ public class GroupCard extends StructureCard
 	 * @param alignments The alignments this card is a part of.
 	 * @param transferable The amount of transferable power this card has.
 	 */
-	public GroupCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, int transferable)
+	public GroupCard(String path, String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments, int transferable)
 	{
-		this(name, special, attackPower, false, resistance, income, arrows, alignments, false, transferable);
+		this(path, name, special, attackPower, false, resistance, income, arrows, alignments, false, transferable);
 	}
 	
 	/**
@@ -80,9 +81,9 @@ public class GroupCard extends StructureCard
 	 * @param alignments The alignments this card is a part of.
 	 * @param transferable The amount of transferable power this card has.
 	 */
-	public GroupCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments)
+	public GroupCard(String path, String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, ArrayList <String> alignments)
 	{
-		this(name, special, attackPower, false, resistance, income, arrows, alignments, false, 0);
+		this(path, name, special, attackPower, false, resistance, income, arrows, alignments, false, 0);
 	}
 	
 	public ArrayList <String> getAlignments()

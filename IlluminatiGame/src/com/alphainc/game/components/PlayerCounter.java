@@ -223,7 +223,8 @@ public class PlayerCounter extends AbstractComponent {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		return "Current Players: " + mPlayerCounter;
 	}
 

@@ -24,7 +24,8 @@ import com.alphainc.game.Main;
 import com.alphainc.game.PlayerCountSingleton;
 import com.alphainc.game.components.PlayerCounter;
 
-public class Menu extends BasicGameState implements ComponentListener, MouseListener {
+public class Menu extends BasicGameState implements ComponentListener, MouseListener 
+{
 	
 	/** ID of the state */
 	private static int mID;
@@ -35,7 +36,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	/** Images for Start tile */
 	private Image startGame;
 	/** Allows for highlighting of menu items */
-	private MouseOverArea menuMouseOver[], startGameMouseOver;
+	private MouseOverArea menuMouseOver[], startGameMouseOver, plusButton, minusButton, startGameButton;
 	/** UNUSED */
 	private AngelCodeFont font;
 	/** UNUSED */
@@ -50,12 +51,13 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	private Image optionsMenuFrame, startGamePlayerNum;
 	/** Checks for which menu buttons were clicked */
 	private boolean menuButtonsClicked[];
-	/** UNUSED */
-	private static long timePassed;
-	/** Custom module to display number of players */
-	private PlayerCounter pc;
+	private int numPlayers;
+
 	/** Singleton used to transfer data to PLAY state */
 	public static PlayerCountSingleton playerCountData;
+	private Image centerNum[];
+	private boolean start_game_menu, options_menu;
+	private Image minusImage, plusImage;
 	
 	/**
 	 * Constructor, this is the menu state of the game.
@@ -67,48 +69,13 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	}
 	
 	@Override
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+	public void init(GameContainer container, StateBasedGame game) throws SlickException 
+	{
 		this.container = container;
 		this.game = game;
 		playerCountData = PlayerCountSingleton.getInstance();
-		initTitleScreen();
-		initOptionsMenu();
-		initStartGame();
-		//font = new AngelCodeFont();
-		System.out.printf("WIDTH: %s HEIGHT: %s\n", container.getWidth(), container.getHeight());
-		//font = new AngelCodeFont();
-		f = new java.awt.Font(/*"Segoe UI Light"*/"Arial", java.awt.Font.BOLD, 36);
-		x = new TrueTypeFont(f, false);
-	}
+		numPlayers = 1;
 
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		renderMenuScreen(container, g);
-		checkClicked(g);
-	}
-
-	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		//timePassed += 1;
-		if((menuButtonsClicked[1] == true) && /*(timePassed % 100 == 0) &&*/ (optionsMenuFrame.getAlpha() <= 1.0F)) {
-			optionsMenuFrame.setAlpha(optionsMenuFrame.getAlpha() + 0.2F);
-		} else if((menuButtonsClicked[1] == false) && (optionsMenuFrame.getAlpha() >= 0F)) {
-			optionsMenuFrame.setAlpha(optionsMenuFrame.getAlpha() - 0.2F);
-		}
-		/*if(timePassed % 100 == 0) {
-			System.out.println("players: " + players);
-		}*/
-	}
-
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return mID;
-	}
-	/**
-	 * Initializes title screen elements
-	 */
-	private void initTitleScreen() {
 		try {
 			/* Menu background image */
 			bg = new Image("res/Pyramid-Abstract-Wallpapers-1.jpg").getScaledCopy(container.getWidth(), container.getHeight());
@@ -120,6 +87,12 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 			menu[1] = new Image("res/options.png").getScaledCopy(0.5F);
 			menu[2] = new Image("res/usermanual.png").getScaledCopy(0.5F);
 			menu[3] = new Image("res/quit.png").getScaledCopy(0.5F);
+			minusImage = new Image("res/playercounter/minus_icon.png").getScaledCopy(48,48);
+			plusImage = new Image("res/playercounter/plus_icon.png").getScaledCopy(48,48);
+			plusButton = new MouseOverArea(container, plusImage, 546 + minusImage.getWidth() + (192/2), 370);
+			minusButton = new MouseOverArea(container, minusImage, 546, 370);
+			startGame = new Image("/src/com/alphainc/res/go_PLACEHOLDER.png");
+			startGameButton = new MouseOverArea(container, startGame, 566, 420);
 		} catch(SlickException se) {
 			System.err.println("UNABLE TO LOAD TITLE SCREEN IMAGES");
 			se.printStackTrace();
@@ -128,12 +101,64 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		menuMouseOver = new MouseOverArea[4];
 		/* Checker for if a menu option is clicked */
 		menuButtonsClicked = new boolean[4];
+		centerNum = new Image[8];
+	
+			
 		for(int ii = 0; ii < 4; ii++) {
 			menuMouseOver[ii] = new MouseOverArea(container, menu[ii], 40, 300 + (ii * 50), menu[ii].getWidth(), menu[ii].getHeight(), this);
 			menuMouseOver[ii].setNormalColor(new Color(1, 1, 1, 0.5F));
 			menuMouseOver[ii].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
 			menuButtonsClicked[ii] = false;
+			
 		}
+		for(int ii = 0; ii < 8; ii++)
+		{
+			centerNum[ii] = new Image("res/playercounter/playercounter" + (ii + 1) + ".png").getScaledCopy(192/2, 48);
+		}
+		//initStartGame();
+		startGamePlayerNum = new Image("res/options_menu_c.png").getScaledCopy(0.4F);
+	
+		startGame = new Image("res/go_PLACEHOLDER.png");
+		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
+		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
+		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
+		
+		/* The frame */
+		optionsMenuFrame = new Image("res/options_menu_c.png").getScaledCopy(0.8F);
+
+		f = new java.awt.Font("Arial", java.awt.Font.BOLD, 36);
+		x = new TrueTypeFont(f, false);
+	}
+
+	@Override
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		renderMenuScreen(container, g);
+		if(start_game_menu)
+		{
+			g.drawImage(startGamePlayerNum, 20 + container.getWidth() / 4.0F, -20 + container.getHeight() / 4.0F);
+			g.drawImage(centerNum[numPlayers-1], 546 + minusButton.getWidth(), 370);
+			startGameButton.render(container, g);
+			minusButton.render(container, g);
+			plusButton.render(container, g);
+			startGameMouseOver.render(container, g);
+			
+			//game.enterState(2);
+		}
+		else if (options_menu)
+		{
+			g.setColor(new Color(0, 0, 0, 0.5F));
+			g.drawImage(optionsMenuFrame, 150, 15);
+			//System.out.println("options display");
+		}
+		
+		
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return mID;
 	}
 	
 	@Override
@@ -142,24 +167,88 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 			if(source == menuMouseOver[ii])
 				menuButtonsClicked[ii] = !menuButtonsClicked[ii];
 		}
-		if(source == startGameMouseOver) {
-			playerCountData.setPlayerCount(pc.getPlayerCount());
-			System.out.println(playerCountData.getPlayerCount());
-			game.enterState(Main.GAME);
-		}
-		/* TODO:  if source == gotoplayscreen, set players = pc.getPlayerCount()*/
+		
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		//System.out.println(x + " " + y);
-		if(menuButtonsClicked[0] == true && button == 0 && x <= pc.getMinusBounds(2) && x >= pc.getMinusBounds(0) 
-				&& y <= pc.getMinusBounds(3) && y >= pc.getMinusBounds(1))
-			pc.decreaseCount();
-		if(menuButtonsClicked[0] == true && button == 0 && x <= pc.getPlusBounds(2) && x >= pc.getPlusBounds(0) 
-				&& y <= pc.getPlusBounds(3) && y >= pc.getPlusBounds(1))
-			pc.increaseCount();
-		//System.out.println(pc.getPlayerCount());
+
+		if(start_game_menu )
+		{
+			if(x >= plusButton.getX() &&
+					x <= (plusButton.getWidth() + plusButton.getX()) &&
+					y >= plusButton.getY() &&
+					y <= (plusButton.getHeight() + plusButton.getY()))
+			{
+				if(numPlayers < 8)
+				{
+					numPlayers ++;
+				}
+			}
+			else if(x >= minusButton.getX() &&
+					x <= (minusButton.getWidth() + minusButton.getX()) &&
+					y >= minusButton.getY() &&
+					y <= (minusButton.getY() + minusButton.getHeight()))
+			{
+				if(numPlayers > 1)
+				{
+					numPlayers --;
+				}
+			}
+			else if(x >= startGameButton.getX() &&
+					x <= (startGameButton.getWidth() + startGameButton.getX()) &&
+					y >= startGameButton.getY() &&
+					y <= (startGameButton.getY() + startGameButton.getHeight()))
+			{
+				//Enters game state
+				players = numPlayers;
+				System.out.println(players);
+				try {
+					game.getState(Main.GAME).init(container, game);
+				} catch (SlickException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				game.enterState(Main.GAME);
+			}
+		}
+		
+		
+		if(x >= menuMouseOver[0].getX() 
+				&& x<= (menuMouseOver[0].getWidth()+menuMouseOver[0].getX())
+				&& y >= (menuMouseOver[0].getY()) 
+				&& y <= (menuMouseOver[0].getHeight() + menuMouseOver[0].getY()))
+		{
+			start_game_menu = true;
+			options_menu = false;
+			System.out.println("Menu item one clicked.");
+		}
+		else if(x >= menuMouseOver[1].getX() 
+				&& x<= (menuMouseOver[1].getWidth() + menuMouseOver[1].getX())
+				&& y >= (menuMouseOver[1].getY()) 
+				&& y <= (menuMouseOver[1].getHeight() + menuMouseOver[1].getY()))
+		{
+			start_game_menu = false;
+			options_menu = true;
+			System.out.println("Menu item two clicked.");
+		}
+		else if(x >= menuMouseOver[2].getX() 
+				&& x<= (menuMouseOver[2].getWidth()+menuMouseOver[2].getX())
+				&& y >= (menuMouseOver[2].getY()) 
+				&& y <= (menuMouseOver[2].getHeight() + menuMouseOver[2].getY()))
+		{
+			start_game_menu = false;
+			options_menu = false;
+			System.out.println("Menu item three clicked.");
+		}
+		else if (x >= menuMouseOver[3].getX() 
+				&& x<= (menuMouseOver[3].getWidth()+menuMouseOver[3].getX())
+				&& y >= (menuMouseOver[3].getY()) 
+				&& y <= (menuMouseOver[3].getHeight() + menuMouseOver[3].getY()))
+		{
+			System.out.println("Menu item four clicked.");
+			container.exit();
+		}
 	}
 	
 	/**
@@ -172,73 +261,18 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		g.drawImage(bg, 0, 0);
 		g.drawImage(title, 40, 50);
 		for(int ii = 0; ii < 4; ii++) {
-			//g.drawImage(menu[ii], 40, 300 + (ii * 50));
 			menuMouseOver[ii].render(container, g);
 		}
 	}
 	
-	/**
-	 * Initialize Options menu objects
-	 */
-	private void initOptionsMenu() throws SlickException {
-		/* The frame */
-		optionsMenuFrame = new Image("res/options_menu_c.png").getScaledCopy(0.8F);
-		//optionsMenuFrame = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);
-		optionsMenuFrame.setAlpha(0F);
-	}
-	
-	/**
-	 * A "pop up" menu that is rendered when 'Options' is clicked
-	 * @param g The graphics object used to render
-	 */
-	private void renderOptionsMenu(Graphics g) {
-		g.setColor(new Color(0, 0, 0, 0.5F));
-		g.drawImage(optionsMenuFrame, 150, 15);
-	}
-	/**
-	 * @deprecated
-	 * Was supposed to be used to derender Options frame, unneeded now.
-	 * 
-	 * @param g Graphics object
-	 */
-	private void derenderOptionsMenu(Graphics g) {
-		if(optionsMenuFrame.getAlpha() <= 0) {
-			
-		}
-	}
-	
-	/**
-	 * This method checks for whether anything was clicked, responds
-	 * accordingly.
-	 * @param g The graphics object used to render
-	 */
-	private void checkClicked(Graphics g) throws SlickException {
-		if(menuButtonsClicked[0]) {
-			//menuButtonsClicked[0] = false;
-			//game.enterState(Main.PLAYER_CHOICE);
-			renderStartGame(g);
-		} else if(menuButtonsClicked[1] || optionsMenuFrame.getAlpha() > 0) {
-			renderOptionsMenu(g);
-		} /*else if(!menuButtonsClicked[1]) {
-			derenderOptionsMenu(g);
-		}*/ else if(menuButtonsClicked[2]) {
-			menuButtonsClicked[2] = false;
-			game.enterState(Main.USER_MANUAL);
-		}
-		if(menuButtonsClicked[3]) {
-			menuButtonsClicked[3] = false;
-			container.exit();
-		}
-	}
-	
-	/**
+/*	*//**
 	 * Initializes the variables needed for creating the mini popup window
 	 * that asks the user for the number of players wanted. Also contains
 	 * buttons to either 1) read the user manual 2) move on to play the game
 	 * or 3) exit from the window.
 	 * 
 	 * @throws SlickException A general exception
-	 */
+	 *//*
 	private void initStartGame() throws SlickException {
 		startGamePlayerNum = new Image("res/options_menu_c.png").getScaledCopy(0.4F);
 		pc = new PlayerCounter(container, 546, 370, 192, 48);
@@ -246,42 +280,13 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
 		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
 		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
-	}
-	/**
-	 * Renders the images for the Start popup menu
-	 * 
-	 * @param g Graphics object
-	 * @throws SlickException A general exception
-	 */
-	private void renderStartGame(Graphics g) throws SlickException {
-		g.drawImage(startGamePlayerNum, 20 + container.getWidth() / 4.0F, -20 + container.getHeight() / 4.0F);
-		pc.render(container, g);
-		startGameMouseOver.render(container, g);
-		//playerCount.render(container, g);
-	}
-	
-	/**
-	 * @deprecated
-	 * UNUSED
-	 */
-	private void unused() {
-		/** init */
-		/*
-			
-		 */
-		/** render */
-		/*
-			g.setFont(x);
-			g.drawString("Start", 40, 500);
-			g.setFont((Font) f);
-			g.drawString("Start", 40, 500);
-			g.fillRect(300, 160, 900, 470);
-		 */
-		/** update */
-		/*
+	}*/
+
+	@Override
+	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		// TODO Auto-generated method stub
 		
-		
-		
-		 */
 	}
+
+
 }

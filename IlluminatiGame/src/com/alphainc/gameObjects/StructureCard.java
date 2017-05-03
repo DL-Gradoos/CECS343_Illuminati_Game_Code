@@ -1,5 +1,8 @@
 package com.alphainc.gameObjects;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 /**
  * Super class for a card that is part of a structure.
  * @author crystalchun
@@ -23,6 +26,10 @@ public class StructureCard extends Card
 	private int treasury;
 	/**The arrows on this card.*/
 	private Arrow[] arrows;
+	/** Card image */
+	private Image cardImage, scaledCardImage;
+	/** Card bounds */
+	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
 	
 	/**
 	 * The main constructor for a structure card object.
@@ -35,10 +42,11 @@ public class StructureCard extends Card
 	 * @param flipped Whether or not this card is flipped over.
 	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, String special, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income, int transferable)
+	public StructureCard(String path, String name, String special, int attackPower, boolean flipped, int resistance, Arrow[] arrows, int income, int transferable)
 	{
 		//Calls Card constructor
 		super(flipped);
+		initCardFace(path);
 		this.name = name;
 		this.special = special;
 		this.attackPower = attackPower;
@@ -59,9 +67,9 @@ public class StructureCard extends Card
 	 * @param arrows The arrows on this card.
 	 * @param transferrable The amount of transferable power this card has.
 	 */
-	public StructureCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, int transferable)
+	public StructureCard(String path, String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, int transferable)
 	{
-		this(name, special, attackPower, false, resistance, arrows, income, transferable);
+		this(path, name, special, attackPower, false, resistance, arrows, income, transferable);
 	}
 	
 	/**
@@ -74,9 +82,9 @@ public class StructureCard extends Card
 	 * @param arrows The arrows this card has.
 	 * @param flipped Whether or not this card is flipped over.
 	 */
-	public StructureCard(int transferable, String name, String special, int attackPower, int income, Arrow[] arrows, boolean flipped)
+	public StructureCard(String path, int transferable, String name, String special, int attackPower, int income, Arrow[] arrows, boolean flipped)
 	{
-		this(name, special, attackPower, false, 0, arrows, income, transferable);
+		this(path, name, special, attackPower, false, 0, arrows, income, transferable);
 	}
 	
 	/**
@@ -89,9 +97,9 @@ public class StructureCard extends Card
 	 * @param arrows The arrows on this card.
 	 * @param flipped Whether or not this card is flipped over.
 	 */
-	public StructureCard(String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, boolean flipped)
+	public StructureCard(String path, String name, String special, int attackPower, int resistance, int income, Arrow[] arrows, boolean flipped)
 	{
-		this(name, special, attackPower, false, resistance, arrows, income, 0);
+		this(path, name, special, attackPower, false, resistance, arrows, income, 0);
 	}
 	
 	/**
@@ -334,4 +342,36 @@ public class StructureCard extends Card
 	{
 		return special;
 	}
+	/**
+	 * Gets the card image
+	 * 
+	 * @param choice front or back
+	 * @return the card image
+	 */
+	public Image getImage(int choice) {
+		return cardImage;
+	}
+	/**
+	 * Rotates image and scaled version by 90 degrees. Updates bounds.
+	 */
+	public void rotate() {
+		cardImage.rotate(90);
+		scaledCardImage.rotate(90);
+	}
+	
+	private void initCardFace(String p) {
+		try {
+			cardImage = new Image(p);
+			cardWidth = cardImage.getWidth();
+			cardHeight = cardImage.getHeight();
+			scaledCardImage = new Image(p).getScaledCopy(0.5F);
+			scaledCardWidth = scaledCardImage.getWidth();
+			scaledCardHeight = scaledCardImage.getHeight();
+		} catch (SlickException se) {
+			System.err.println("Could not find card image of card " + name);
+			se.printStackTrace();
+		}
+	}
+	
+	
 }

@@ -16,10 +16,10 @@ public class IlluminatiCard extends StructureCard
 	 * @param income The income of this card.
 	 * @param arrows The arrows on this card.
 	 */
-	public IlluminatiCard(String name, String special, int attackPower, int income, Arrow[] arrows)
+	public IlluminatiCard(String path, String name, String special, int attackPower, int income, Arrow[] arrows)
 	{
 		//Calls StructureCard constructor
-		super(attackPower, name, special, attackPower, income, arrows, false);
+		super(path, attackPower, name, special, attackPower, income, arrows, false);
 	}
 	
 }
