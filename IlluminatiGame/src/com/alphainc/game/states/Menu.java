@@ -56,6 +56,12 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	private PlayerCounter pc;
 	/** Singleton used to transfer data to PLAY state */
 	public static PlayerCountSingleton playerCountData;
+	/** Paths to images 0: cards, 1: playercounter, 2: titlescreen*/
+	private String imagePath[] = {
+			"src/com/alphainc/res/cards/",
+			"src/com/alphainc/res/playercounter/",
+			"src/com/alphainc/res/titlescreen/"
+	};
 	
 	/**
 	 * Constructor, this is the menu state of the game.
@@ -111,15 +117,15 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	private void initTitleScreen() {
 		try {
 			/* Menu background image */
-			bg = new Image("res/Pyramid-Abstract-Wallpapers-1.jpg").getScaledCopy(container.getWidth(), container.getHeight());
+			bg = new Image(imagePath[2] + "Pyramid-Abstract-Wallpapers-1.jpg").getScaledCopy(container.getWidth(), container.getHeight());
 			/* The title and subheading in the top right corner */
 			title = new Image("res/title2.png").getScaledCopy(0.5F);
 			/* Menu images */
 			menu = new Image[4];
-			menu[0] = new Image("res/start.png").getScaledCopy(0.5F);
-			menu[1] = new Image("res/options.png").getScaledCopy(0.5F);
-			menu[2] = new Image("res/usermanual.png").getScaledCopy(0.5F);
-			menu[3] = new Image("res/quit.png").getScaledCopy(0.5F);
+			menu[0] = new Image(imagePath[2] + "start.png").getScaledCopy(0.5F);
+			menu[1] = new Image(imagePath[2] + "options.png").getScaledCopy(0.5F);
+			menu[2] = new Image(imagePath[2] + "usermanual.png").getScaledCopy(0.5F);
+			menu[3] = new Image(imagePath[2] + "quit.png").getScaledCopy(0.5F);
 		} catch(SlickException se) {
 			System.err.println("UNABLE TO LOAD TITLE SCREEN IMAGES");
 			se.printStackTrace();
@@ -145,6 +151,13 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		if(source == startGameMouseOver) {
 			playerCountData.setPlayerCount(pc.getPlayerCount());
 			System.out.println(playerCountData.getPlayerCount());
+			try {
+				/** Reinitializes the Game state */
+				game.getState(Main.GAME).init(container, game);
+			} catch (SlickException e) {
+				System.err.println("REINIT OF GAME STATE FAILED");
+				e.printStackTrace();
+			}
 			game.enterState(Main.GAME);
 		}
 		/* TODO:  if source == gotoplayscreen, set players = pc.getPlayerCount()*/
@@ -182,7 +195,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	 */
 	private void initOptionsMenu() throws SlickException {
 		/* The frame */
-		optionsMenuFrame = new Image("res/options_menu_c.png").getScaledCopy(0.8F);
+		optionsMenuFrame = new Image(imagePath[2] + "options_menu_c.png").getScaledCopy(0.8F);
 		//optionsMenuFrame = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);
 		optionsMenuFrame.setAlpha(0F);
 	}
@@ -240,9 +253,9 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	 * @throws SlickException A general exception
 	 */
 	private void initStartGame() throws SlickException {
-		startGamePlayerNum = new Image("res/options_menu_c.png").getScaledCopy(0.4F);
+		startGamePlayerNum = new Image(imagePath[2] + "options_menu_c.png").getScaledCopy(0.4F);
 		pc = new PlayerCounter(container, 546, 370, 192, 48);
-		startGame = new Image("res/go_PLACEHOLDER.png");
+		startGame = new Image(imagePath[2] + "go_PLACEHOLDER.png");
 		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
 		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
 		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
