@@ -1,4 +1,4 @@
-package com.alphainc.gameObjects;
+package com.alphainc.game.gameObjects;
 
 /**
  * A generic card object in the Illuminati game.

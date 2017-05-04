@@ -17,8 +17,9 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.alphainc.game.Camera;
-import com.alphainc.gameObjects.IlluminatiCard;
-import com.alphainc.gameObjects.StructureCard;
+import com.alphainc.game.gameObjects.Arrow;
+import com.alphainc.game.gameObjects.IlluminatiCard;
+import com.alphainc.game.gameObjects.StructureCard;
 import com.alphainc.game.player.PlayerGUI;
 /**
  * The main game
@@ -48,7 +49,8 @@ public class Game extends BasicGameState implements KeyListener {
 	private List<PlayerGUI> playerOrder;
 	/** Whose turn it is */
 	private int turn = 0;
-	
+	/** Iluminati Cards */
+	private StructureCard ilCards[];
 	public Game(int id) {
 		mID = id;
 	}
@@ -65,13 +67,21 @@ public class Game extends BasicGameState implements KeyListener {
 			//initCards();
 			
 			
-			
-			
+			ilCards = new IlluminatiCard[8];
+			ilCards[0] = new IlluminatiCard("res/cards/thenetwork.png", "The Network", "special", 10, 9,
+						 new Arrow[] {
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true)
+						 });
+			ilCards[0].setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105);
+			ilCards[0].rotate();
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
-			card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
+			card = new Image("src/com/alphainc/res/cards/theufos.png").getScaledCopy(0.5F);
 			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
 			card.setRotation(90);
-			card.setImageColor(0.5f, 0.5f, 0.5f);
+			//card.setImageColor(0.5f, 0.5f, 0.5f);
 			System.out.println("CARD AFTER: " + card.getWidth() + " " + card.getHeight());
 			card2 = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);
 			/*card2.rotate(90);
@@ -88,7 +98,7 @@ public class Game extends BasicGameState implements KeyListener {
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
 		}
-		
+		ilCards[0].render(container, g);
 		
 		/** TESTING IMAGES, CAN DELETE IF YOU WANT*/
 		card.draw(20, 20);

@@ -194,18 +194,36 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 				&& y >= (menuMouseOver[0].getY()) 
 				&& y <= (menuMouseOver[0].getHeight() + menuMouseOver[0].getY()))
 		{
-			start_game_menu = true;
-			options_menu = false;
-			System.out.println("Menu item one clicked.");
+			if(start_game_menu)
+			{
+				start_game_menu = false;
+				numPlayers = 1;
+			}
+			else
+			{
+				start_game_menu = true;
+				options_menu = false;
+				System.out.println("Menu item one clicked.");
+			}
+			
 		}
 		else if(x >= menuMouseOver[1].getX() 
 				&& x<= (menuMouseOver[1].getWidth() + menuMouseOver[1].getX())
 				&& y >= (menuMouseOver[1].getY()) 
 				&& y <= (menuMouseOver[1].getHeight() + menuMouseOver[1].getY()))
 		{
-			start_game_menu = false;
-			options_menu = true;
-			System.out.println("Menu item two clicked.");
+			if(options_menu)
+			{
+				options_menu = false;
+			}
+			else
+			{
+				numPlayers = 1;
+				start_game_menu = false;
+				options_menu = true;
+				System.out.println("Menu item two clicked.");
+			}
+			
 		}
 		else if(x >= menuMouseOver[2].getX() 
 				&& x<= (menuMouseOver[2].getWidth()+menuMouseOver[2].getX())

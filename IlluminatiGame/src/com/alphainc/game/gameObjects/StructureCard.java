@@ -1,5 +1,7 @@
-package com.alphainc.gameObjects;
+package com.alphainc.game.gameObjects;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -30,6 +32,9 @@ public class StructureCard extends Card
 	private Image cardImage, scaledCardImage;
 	/** Card bounds */
 	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
+	
+	/** Coords */
+	private int xCoords, yCoords;
 	
 	/**
 	 * The main constructor for a structure card object.
@@ -349,7 +354,18 @@ public class StructureCard extends Card
 	 * @return the card image
 	 */
 	public Image getImage(int choice) {
+		
 		return cardImage;
+	}
+	
+	public void setPosition(int x, int y) {
+		xCoords = x;
+		yCoords = y;
+	}
+	public void render(GameContainer container, Graphics g) {
+		
+			scaledCardImage.drawCentered(xCoords, yCoords);
+
 	}
 	/**
 	 * Rotates image and scaled version by 90 degrees. Updates bounds.

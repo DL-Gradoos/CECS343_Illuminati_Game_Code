@@ -1,4 +1,4 @@
-package com.alphainc.gameObjects;
+package com.alphainc.game.gameObjects;
 
 /**
  * An arrow on one of the cards in the game Illuminati.
@@ -7,8 +7,6 @@ package com.alphainc.gameObjects;
  */
 public class Arrow 
 {
-	/**The card this arrow is on.*/
-	private StructureCard card;
 	/**Whether or not this arrow is connected to anything.*/
 	private boolean connected;
 	/**The arrow this arrow is connected to.*/
@@ -18,28 +16,24 @@ public class Arrow
 	
 	/**
 	 * Constructor for an arrow object.
-	 * @param location The location of this arrow on a card.
-	 * @param card The card this arrow is located on.
 	 * @param connected Whether or not the arrow is connected to something else.
 	 * @param connectedTo The arrow it is connecting to.
 	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
 	 */
-	public Arrow(StructureCard card, boolean connected, Arrow connectedTo, boolean direction)
+	public Arrow( boolean connected, Arrow connectedTo, boolean direction)
 	{
-		this.card = card;
+
 		this.connected = connected;
 		this.connectedTo = connectedTo;
 		this.direction = direction;
 	}
 	/**
 	 * Overloaded constructor for this arrow. The arrow is unconnected by default.
-	 * @param location The location of this arrow on a card.
-	 * @param card The card this arrow is located on.
 	 * @param direction The direction the arrow the points, true for out, false for in.
 	 */
-	public Arrow(StructureCard card, boolean direction)
+	public Arrow(boolean direction)
 	{
-		this(card, false, null, direction);
+		this(false, null, direction);
 	}
 	
 	/**
@@ -63,15 +57,6 @@ public class Arrow
 	}
 
 	/**
-	 * Gets the card this arrow is on.
-	 * @return The card this arrow is on.
-	 */
-	public StructureCard getCard()
-	{
-		return card;
-	}
-	
-	/**
 	 * Gets whether or not this arrow is connected.
 	 * @return True if the arrow is connected to something, false otherwise.
 	 */
@@ -87,15 +72,6 @@ public class Arrow
 	public Arrow connectedTo()
 	{
 		return connectedTo;
-	}
-	
-	/**
-	 * Returns the card this arrow is connected to.
-	 * @return The card this arrow is connected to.
-	 */
-	public StructureCard getCardConnectedTo()
-	{
-		return connectedTo.getCard();
 	}
 	
 	/**
