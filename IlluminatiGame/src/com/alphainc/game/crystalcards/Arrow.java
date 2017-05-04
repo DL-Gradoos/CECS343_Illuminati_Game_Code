@@ -24,9 +24,9 @@ public class Arrow
 	 * @param connectedTo The arrow it is connecting to.
 	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
 	 */
-	public Arrow(StructureCard card, boolean connected, Arrow connectedTo, boolean direction)
+	public Arrow(/*StructureCard card, */boolean connected, Arrow connectedTo, boolean direction)
 	{
-		this.card = card;
+		//this.card = card;
 		this.connected = connected;
 		this.connectedTo = connectedTo;
 		this.direction = direction;
@@ -37,10 +37,10 @@ public class Arrow
 	 * @param card The card this arrow is located on.
 	 * @param direction The direction the arrow the points, true for out, false for in.
 	 */
-	public Arrow(StructureCard card, boolean direction)
+	/*public Arrow(StructureCard card, boolean direction)
 	{
 		this(card, false, null, direction);
-	}
+	}*/
 	
 	/**
 	 * Sets what this arrow is connected to.

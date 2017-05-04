@@ -1,5 +1,7 @@
 package com.alphainc.game.crystalcards;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -27,9 +29,11 @@ public class StructureCard extends Card
 	/**The arrows on this card.*/
 	private Arrow[] arrows;
 	/** Card image */
-	private Image cardImage, scaledCardImage;
+	private Image cardImage, cardImageBack, scaledCardImage, scaledCardImageBack;
 	/** Card bounds */
 	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
+	/** Coords */
+	private int xCoords, yCoords;
 	
 	/**
 	 * The main constructor for a structure card object.
@@ -349,8 +353,27 @@ public class StructureCard extends Card
 	 * @return the card image
 	 */
 	public Image getImage(int choice) {
+		switch(choice) {
+			case 0:
+				return scaledCardImageBack;
+			case 1:
+				return scaledCardImage;
+		}
 		return cardImage;
 	}
+	
+	public void setPosition(int x, int y) {
+		xCoords = x;
+		yCoords = y;
+	}
+	
+	public void render(GameContainer container, Graphics g) {
+		if(isFlipped())
+			scaledCardImage.drawCentered(xCoords, yCoords);
+		else
+			scaledCardImageBack.drawCentered(xCoords, yCoords);
+	}
+	
 	/**
 	 * Rotates image and scaled version by 90 degrees. Updates bounds.
 	 */
@@ -362,9 +385,11 @@ public class StructureCard extends Card
 	private void initCardFace(String p) {
 		try {
 			cardImage = new Image(p);
+			cardImageBack = new Image("res/cards/Illuminatiback.png");
 			cardWidth = cardImage.getWidth();
 			cardHeight = cardImage.getHeight();
 			scaledCardImage = new Image(p).getScaledCopy(0.5F);
+			scaledCardImageBack = new Image("res/cards/Illuminatiback.png").getScaledCopy(0.5F);
 			scaledCardWidth = scaledCardImage.getWidth();
 			scaledCardHeight = scaledCardImage.getHeight();
 		} catch (SlickException se) {

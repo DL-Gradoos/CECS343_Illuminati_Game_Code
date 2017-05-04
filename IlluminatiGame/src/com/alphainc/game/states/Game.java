@@ -13,11 +13,16 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.alphainc.game.Camera;
+import com.alphainc.game.Main;
+import com.alphainc.game.crystalcards.Arrow;
 import com.alphainc.game.crystalcards.IlluminatiCard;
+import com.alphainc.game.crystalcards.IlluminatiCardWrapper;
 import com.alphainc.game.crystalcards.StructureCard;
 import com.alphainc.game.player.PlayerGUI;
 /**
@@ -26,7 +31,7 @@ import com.alphainc.game.player.PlayerGUI;
  * @author Daniel
  *
  */
-public class Game extends BasicGameState implements KeyListener {
+public class Game extends BasicGameState implements ComponentListener, KeyListener {
 	/** State id */
 	private static int mID;
 	/** not used yet */
@@ -48,6 +53,8 @@ public class Game extends BasicGameState implements KeyListener {
 	private List<PlayerGUI> playerOrder;
 	/** Whose turn it is */
 	private int turn = 0;
+	/** Iluminati Cards */
+	private StructureCard ilCards[];
 	
 	public Game(int id) {
 		mID = id;
@@ -61,7 +68,15 @@ public class Game extends BasicGameState implements KeyListener {
 			initPlayers(container);
 			determinePlayerOrder();
 			//initCards();
-			
+			ilCards = new IlluminatiCard[8];
+			ilCards[0] = new IlluminatiCard("res/cards/thenetwork.png", "The Network", "special", 10, 9,
+						 new Arrow[] {
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true),
+								 new Arrow(false, null, true)
+						 });
+			ilCards[0].setPosition(400, 200);
 			
 			
 			
@@ -94,6 +109,7 @@ public class Game extends BasicGameState implements KeyListener {
 		card2.draw(20,20);
 		//g.drawImage(card, 100, 100);
 		//g.draw(card2, 100, 100);
+		ilCards[0].render(container, g);
 	}
 
 	@Override
@@ -104,7 +120,6 @@ public class Game extends BasicGameState implements KeyListener {
 
 	@Override
 	public int getID() {
-		
 		return mID;
 	}
 	
@@ -121,6 +136,18 @@ public class Game extends BasicGameState implements KeyListener {
 			playerOrder.get(turn).setShouldBeRendered(true);
 		}
 	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if(button == Input.MOUSE_LEFT_BUTTON)
+			ilCards[0].flip();
+	}
+	
+	@Override
+	public void componentActivated(AbstractComponent source) {
+		
+	}
+	
 	/**
 	 * Initializes the amount of players from the option chosen in Menu
 	 * @param container The game container
