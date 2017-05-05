@@ -1,0 +1,8 @@
+thebavarianIlluminati.png,The Bavarian Illuminati,May make one privileged attack each turn at a cost of 5MB.,10,9
+thebermudatriangle.png,The Bermuda Triangle,May reorganize groups freely at end of turn.,8,9
+thediscordiansociety.png,The Discordian Society,+4 on any attempt to control Weird groups; immune to any attacks from Government or Straight groups,8,8
+thegnomesofzurich.png,The Gnomes of Zurich,May move money freely at end of turn,7,12
+thenetwork.png,The Network,Turns over two cards at beginning of turn,7,9
+theservantsofcthulu.png,The Servants of Cthulhu,+2 on any attempt to destroy any group,9,7
+thesocietyofassassins.png,The Society of Assassins,+4 on any attempt to neutralize any group,8,8
+theufos.png,The UFOs,Illuminati group may participate in two attacks per turn,6,8

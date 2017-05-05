@@ -21,8 +21,10 @@ import org.newdawn.slick.state.StateBasedGame;
 import com.alphainc.game.Camera;
 import com.alphainc.game.Main;
 import com.alphainc.game.crystalcards.Arrow;
+import com.alphainc.game.crystalcards.Deck;
 import com.alphainc.game.crystalcards.IlluminatiCard;
 import com.alphainc.game.crystalcards.IlluminatiCardWrapper;
+import com.alphainc.game.crystalcards.PowerStructure;
 import com.alphainc.game.crystalcards.StructureCard;
 import com.alphainc.game.player.PlayerGUI;
 /**
@@ -41,8 +43,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private Image card, card2;
 	/** Background */
 	private Image bg;
-	/** Not used yet */
-	private IlluminatiCard illumCard[];
+	/** List of illumnati cards */
+	private List<StructureCard> illumCard;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	private Camera camera;
 	/** The players */
@@ -65,10 +67,11 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		/** Initialize only when entered into from Menu state */
 		if(Menu.playerCountData.getPlayerCount() > 0) {
 			bg = new Image("res/gui/tabletop.png");
+			initIllumCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
-			//initCards();
-			ilCards = new IlluminatiCard[8];
+			assignIllumCard();
+			/*ilCards = new IlluminatiCard[8];
 			ilCards[0] = new IlluminatiCard("res/cards/thenetwork.png", "The Network", "special", 10, 9,
 						 new Arrow[] {
 								 new Arrow(false, null, true),
@@ -76,17 +79,17 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 								 new Arrow(false, null, true),
 								 new Arrow(false, null, true)
 						 });
-			ilCards[0].setPosition(400, 200);
+			ilCards[0].setPosition(400, 200);*/
 			
 			
 			
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
-			card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
+			/*card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
 			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
 			card.setRotation(90);
 			card.setImageColor(0.5f, 0.5f, 0.5f);
 			System.out.println("CARD AFTER: " + card.getWidth() + " " + card.getHeight());
-			card2 = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);
+			card2 = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);*/
 			/*card2.rotate(90);
 			System.out.println("CARD 1: " + card.getWidth() + " " + card.getHeight());
 			System.out.println("CARD 2: " + card2.getWidth() + " " + card2.getHeight());*/
@@ -101,15 +104,15 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
 		}
-		
+		//for(StructureCard sc : illumCard) sc.render(container, g);
 		
 		/** TESTING IMAGES, CAN DELETE IF YOU WANT*/
-		card.draw(20, 20);
+		/*card.draw(20, 20);
 		//card.drawCentered(100, 100);
 		card2.draw(20,20);
 		//g.drawImage(card, 100, 100);
 		//g.draw(card2, 100, 100);
-		ilCards[0].render(container, g);
+		ilCards[0].render(container, g);*/
 	}
 
 	@Override
@@ -139,8 +142,11 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == Input.MOUSE_LEFT_BUTTON)
-			ilCards[0].flip();
+		if(button == Input.MOUSE_LEFT_BUTTON) {
+			for(StructureCard sc : illumCard)
+				sc.flip();
+			//ilCards[0].flip();
+		}
 	}
 	
 	@Override
@@ -202,11 +208,31 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	}
 	
 	
-	/* Unused for now */
-	private void initIllCards() {
-		illumCard = new IlluminatiCard[8];
+	/**
+	 * Initializes Illuminati Cards
+	 */
+	private void initIllumCards(GameContainer container) {
+		Deck deck = new Deck();
+		illumCard = deck.getIlluminatiDeck();
+		for(StructureCard sc : illumCard) {
+			sc.setPosition(container.getWidth() / 2 + 150, container.getHeight() / 2);
+			sc.flip();
+		}
 		/*illumCard[0] = new IlluminatiCard("res/illumcards/thebavarianilluminati.png", 
 				"The Bavarian Illuminati", "May make one privileged attack each turn at a cost of 5MB.",
 				10, 9, );*/
+	}
+	
+	/**
+	 * Assigns a random illuminati card for each player
+	 */
+	private void assignIllumCard() {
+		Random rand = new Random();
+		for(int ii = 0; ii < player.length; ii++) {
+			PowerStructure ps = new PowerStructure(ii);
+			ps.add(illumCard.remove(rand.nextInt(illumCard.size())));
+			System.out.println(ps.get(0).getName());
+			player[ii].addPowerStructure(ps);
+		}
 	}
 }

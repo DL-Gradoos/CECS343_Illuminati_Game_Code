@@ -367,6 +367,14 @@ public class StructureCard extends Card
 		yCoords = y;
 	}
 	
+	public int getX() {
+		return xCoords;
+	}
+	
+	public int getY() {
+		return yCoords;
+	}
+	
 	public void render(GameContainer container, Graphics g) {
 		if(isFlipped())
 			scaledCardImage.drawCentered(xCoords, yCoords);
@@ -385,11 +393,11 @@ public class StructureCard extends Card
 	private void initCardFace(String p) {
 		try {
 			cardImage = new Image(p);
-			cardImageBack = new Image("res/cards/Illuminatiback.png");
+			cardImageBack = new Image("res/cards/illum/Illuminatiback.png");
 			cardWidth = cardImage.getWidth();
 			cardHeight = cardImage.getHeight();
 			scaledCardImage = new Image(p).getScaledCopy(0.5F);
-			scaledCardImageBack = new Image("res/cards/Illuminatiback.png").getScaledCopy(0.5F);
+			scaledCardImageBack = new Image("res/cards/illum/Illuminatiback.png").getScaledCopy(0.5F);
 			scaledCardWidth = scaledCardImage.getWidth();
 			scaledCardHeight = scaledCardImage.getHeight();
 		} catch (SlickException se) {

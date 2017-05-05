@@ -25,7 +25,17 @@ public class PowerStructure {
 	
 	public void render(GameContainer container, Graphics g) {
 		for(StructureCard c : cards) {
-			//g.drawImage(c, );
+			//implement get position
+			c.render(container, g);
+			//g.drawImage(c.getImage(0), c.getX(), c.getY());
 		}
+	}
+	
+	public StructureCard get(int index) {
+		return cards.get(index);
+	}
+	
+	public void add(StructureCard card) {
+		cards.add(card);
 	}
 }
