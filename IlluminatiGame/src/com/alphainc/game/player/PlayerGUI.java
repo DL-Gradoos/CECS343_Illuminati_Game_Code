@@ -8,6 +8,7 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 import com.alphainc.game.crystalcards.PowerStructure;
+import com.alphainc.game.states.Game;
 /**
  * This class provides options for the player to take, also renders
  * their power structure.
@@ -38,10 +39,11 @@ public class PlayerGUI extends AbstractComponent {
 		mPlayerID = playerId;
 		initSideBar();
 	}
+	
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		if(shouldBeRendered) {
-			g.drawImage(sideBar, 0, 0);
-			g.drawImage(playerNum, 100, 100);
+			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());
+			g.drawImage(playerNum, -Game.camera.getTopLeftX() + 50, -Game.camera.getTopLeftY() + 100);
 			powerStructure.render(container, g);
 		}
 	}
@@ -87,8 +89,8 @@ public class PlayerGUI extends AbstractComponent {
 	
 	private void initSideBar() {
 		try {
-			sideBar = new Image("res/gui/playergui3.png");
-			playerNum = new Image("res/playercounter/playercounter" + (mPlayerID + 1) + ".png").getScaledCopy(0.4F);
+			sideBar = new Image("res/gui/playergui2.png");
+			playerNum = new Image("res/playercounter/playercounter" + (mPlayerID + 1) + ".png").getScaledCopy(0.2F);
 		} catch(SlickException se) {
 			System.err.println("COULD NOT LOAD SIDE BAR FOR " + mPlayerName);
 		}

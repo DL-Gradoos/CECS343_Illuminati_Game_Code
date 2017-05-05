@@ -46,7 +46,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** List of illumnati cards */
 	private List<StructureCard> illumCard;
 	/** When shifting the camera, keeps gui locked to side of screen */
-	private Camera camera;
+	public static Camera camera;
 	/** The players */
 	private PlayerGUI player[];
 	/** The dice rolls */
@@ -57,6 +57,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private int turn = 0;
 	/** Iluminati Cards */
 	private StructureCard ilCards[];
+	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
+	private boolean cameraMovement[];
 	
 	public Game(int id) {
 		mID = id;
@@ -66,7 +68,6 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		/** Initialize only when entered into from Menu state */
 		if(Menu.playerCountData.getPlayerCount() > 0) {
-			bg = new Image("res/gui/tabletop.png");
 			initIllumCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
@@ -99,6 +100,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		g.translate(camera.getTopLeftX(), camera.getTopLeftY());
 		bg.draw();
 		/* Renders the current players gui */
 		for(int ii = 0; ii < player.length; ii++) {
@@ -117,7 +119,36 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		
+		//Move speed of the camera
+		float moveSpeed = delta * 0.2f;
+		//left
+		if(cameraMovement[0]) {
+			if(camera.getTopLeftX() > 1000)
+				camera.setCurrentTopLeftCoords(1000.999F, camera.getTopLeftY());
+			else
+				camera.adjustCoords(moveSpeed, 0);
+		}
+		//up
+		if(cameraMovement[1]) {
+			if(camera.getTopLeftY() > 600)
+				camera.setCurrentTopLeftCoords(camera.getTopLeftX(), 600.999F);
+			else
+				camera.adjustCoords(0, moveSpeed);
+		}
+		//right
+		if(cameraMovement[2]) {
+			if(camera.getTopLeftX() < -1000)
+				camera.setCurrentTopLeftCoords(-1000.999F, camera.getTopLeftY());
+			else
+				camera.adjustCoords(-moveSpeed, 0);
+		}
+		//down
+		if(cameraMovement[3]) {
+			if(camera.getTopLeftY() < -600)
+				camera.setCurrentTopLeftCoords(camera.getTopLeftX(), -600.999F);
+			else
+				camera.adjustCoords(0, -moveSpeed);
+		}
 		
 	}
 
@@ -138,6 +169,26 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 				turn++;*/
 			playerOrder.get(turn).setShouldBeRendered(true);
 		}
+		if(key == Input.KEY_LEFT || key == Input.KEY_A)
+			cameraMovement[0] = true;
+		if(key == Input.KEY_UP || key == Input.KEY_W)
+			cameraMovement[1] = true;
+		if(key == Input.KEY_RIGHT || key == Input.KEY_D)
+			cameraMovement[2] = true;
+		if(key == Input.KEY_DOWN || key == Input.KEY_S)
+			cameraMovement[3] = true;
+	}
+	
+	@Override
+	public void keyReleased(int key, char c) {
+		if(key == Input.KEY_LEFT || key == Input.KEY_A)
+			cameraMovement[0] = false;
+		if(key == Input.KEY_UP || key == Input.KEY_W)
+			cameraMovement[1] = false;
+		if(key == Input.KEY_RIGHT || key == Input.KEY_D)
+			cameraMovement[2] = false;
+		if(key == Input.KEY_DOWN || key == Input.KEY_S)
+			cameraMovement[3] = false;
 	}
 	
 	@Override
@@ -166,7 +217,14 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		}
 		//Init Camera
 		camera = new Camera();
+		cameraMovement = new boolean[] {false, false, false, false};
 		//Init background image
+		try {
+			bg = new Image("res/gui/tabletop.png");
+		} catch (SlickException e) {
+			System.err.println("COULD NOT LOAD IMAGE");
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * "Rolls 2 die" according to how many players there are and assigns turn order
