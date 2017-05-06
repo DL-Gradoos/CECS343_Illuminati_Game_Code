@@ -18,8 +18,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.alphainc.game.Camera;
 import com.alphainc.game.gameObjects.Arrow;
+import com.alphainc.game.gameObjects.Deck;
 import com.alphainc.game.gameObjects.IlluminatiCard;
 import com.alphainc.game.gameObjects.StructureCard;
+import com.alphainc.game.gameObjects.PowerStructure;
 import com.alphainc.game.player.PlayerGUI;
 /**
  * The main game
@@ -37,8 +39,8 @@ public class Game extends BasicGameState implements KeyListener {
 	private Image card, card2;
 	/** Background */
 	private Image bg;
-	/** Not used yet */
-	private IlluminatiCard illumCard[];
+	/** List of illumnati cards */
+	private List<StructureCard> illumCard;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	private Camera camera;
 	/** The players */
@@ -51,24 +53,34 @@ public class Game extends BasicGameState implements KeyListener {
 	private int turn = 0;
 	/** Iluminati Cards */
 	private StructureCard ilCards[];
+	//Changes card displayed on space press
+	private boolean temp;
 	public Game(int id) {
 		mID = id;
 	}
 	
+private int counter;
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		/** Initialize only when entered into from Menu state */
 		System.out.println("game " + Menu.players);
-		if(Menu.players > 0) 
+		
+//Clean up
+		counter = 0;
+		if(true/*Menu.players > 0*/) 
 		{
 			bg = new Image("com/alphainc/res/gui/tabletop.png");
+
+			initIllumCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
+			assignIllumCard();
 			//initCards();
 			
 			
 			ilCards = new IlluminatiCard[8];
-			ilCards[0] = new IlluminatiCard("res/cards/thenetwork.png", "The Network", "special", 10, 9,
+			//Testing illuminati card 1 initialize
+			ilCards[0] = new IlluminatiCard("res/cards/illum/thenetwork.png", "The Network", "special", 10, 9,
 						 new Arrow[] {
 								 new Arrow(false, null, true),
 								 new Arrow(false, null, true),
@@ -76,20 +88,47 @@ public class Game extends BasicGameState implements KeyListener {
 								 new Arrow(false, null, true)
 						 });
 			ilCards[0].setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105);
-			ilCards[0].rotate();
+			//ilCards[0].rotate(90);
+			//Illuminati card 2 initialize
+			ilCards[1] = new IlluminatiCard("src/com/alphainc/res/cards/thesocietyofassassins.png", "The Society of Assassins", "special", 10, 9,
+					 new Arrow[] {
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true)
+					 });
+			ilCards[2] = new IlluminatiCard("src/com/alphainc/res/cards/thesocietyofassassins.png", "The Society of Assassins", "special", 10, 9,
+					 new Arrow[] {
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true),
+							 new Arrow(false, null, true)
+					 });
+			
+			ilCards[1].setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105);
+			
+			//ilCards[1].rotate(90);
+			//ilCards[1].rotateToThisAmount(0);
+			//System.out.println("current rotation" + ilCards[1].getRotate());
+			/*ilCards[0].rotate(90);
+			ilCards[0].connect(ilCards[1], 2, 0); //Illum card 0 connects with top arrow to Illum card 1's top arrow
+			ilCards[1].connect(ilCards[2], 1, 0);*/
+			
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
 			card = new Image("src/com/alphainc/res/cards/theufos.png").getScaledCopy(0.5F);
 			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
 			card.setRotation(90);
 			//card.setImageColor(0.5f, 0.5f, 0.5f);
 			System.out.println("CARD AFTER: " + card.getWidth() + " " + card.getHeight());
-			card2 = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);
+			card2 = new Image("res/cards/illum/thenetwork.png").getScaledCopy(0.5F);
 			/*card2.rotate(90);
 			System.out.println("CARD 1: " + card.getWidth() + " " + card.getHeight());
 			System.out.println("CARD 2: " + card2.getWidth() + " " + card2.getHeight());*/
 			//test = new StructureCard();
 		}
 	}
+
+
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
@@ -98,7 +137,26 @@ public class Game extends BasicGameState implements KeyListener {
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
 		}
+//Clean up
+/*		if(counter == 90)
+		{
+			
+			
+			counter = 0;
+		}
+		counter ++;*/
 		ilCards[0].render(container, g);
+		ilCards[1].render(container, g);
+		ilCards[2].render(container, g);
+		/*if(temp)
+		{
+			ilCards[0].render(container, g);
+		}
+		else
+		{
+			ilCards[1].render(container, g);
+		}*/
+		
 		
 		/** TESTING IMAGES, CAN DELETE IF YOU WANT*/
 		card.draw(20, 20);
@@ -131,15 +189,58 @@ public class Game extends BasicGameState implements KeyListener {
 			else
 				turn++;*/
 			playerOrder.get(turn).setShouldBeRendered(true);
+//Clean up
+			//System.out.println("We're connecting 1's top with 2's bottom");
+			/*System.out.println("1. " +ilCards[0].getName() + " Rotation: " + ilCards[0].getRotate());
+			System.out.println("2. " + ilCards[1].getName() + " Rotation: " + ilCards[1].getRotate());*/
+			//temp = true;
+			if(temp)
+			{
+				//ilCards[0].rotate(90);
+				temp = false;
+			}
+			else
+			{
+				temp = true;
+			}
+			
+		}
+		else if(key == Input.KEY_F)
+		{
+			//System.out.println("current rotation" + ilCards[1].getRotate());
+		/*	
+			System.out.println("Incorrect connection.");
+			System.out.println("1. " +ilCards[0].getName() + " Arrow:" 
+			+ ilCards[0].getConnectedArrow() + " " + " Rotation: " + ilCards[0].getRotate());
+			System.out.println("2. " +ilCards[1].getName() + " Arrow:"  
+			+ ilCards[1].getConnectedArrow() + " " + " Rotation: " + ilCards[1].getRotate());*/
+			
+			ilCards[0].rotate(90);
+			ilCards[1].setRotation(0);
+			ilCards[2].setRotation(0);
+			ilCards[0].connect(ilCards[1], 1, 0);
+			ilCards[1].connect(ilCards[2], 0, 2);
 		}
 	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if(button == Input.MOUSE_LEFT_BUTTON) {
+			for(StructureCard sc : illumCard)
+				sc.flip();
+			//ilCards[0].flip();
+		}
+	}
+	
+
 	/**
 	 * Initializes the amount of players from the option chosen in Menu
 	 * @param container The game container
 	 */
 	private void initPlayers(GameContainer container) {
+//Clean up
 		//Player GUI's init
-		player = new PlayerGUI[Menu.players];
+		player = new PlayerGUI[2/*Menu.players*/];
 		for(int ii = 0; ii < player.length; ii++) {
 			player[ii] = new PlayerGUI(container, "Player " + (ii + 1), ii);
 		}
@@ -187,11 +288,31 @@ public class Game extends BasicGameState implements KeyListener {
 	}
 	
 	
-	/* Unused for now */
-	private void initIllCards() {
-		illumCard = new IlluminatiCard[8];
+	/**
+	 * Initializes Illuminati Cards
+	 */
+	private void initIllumCards(GameContainer container) {
+		Deck deck = new Deck();
+		illumCard = deck.getIlluminatiDeck();
+		for(StructureCard sc : illumCard) {
+			sc.setPosition(container.getWidth() / 2 + 150, container.getHeight() / 2);
+			sc.flip();
+		}
 		/*illumCard[0] = new IlluminatiCard("res/illumcards/thebavarianilluminati.png", 
 				"The Bavarian Illuminati", "May make one privileged attack each turn at a cost of 5MB.",
 				10, 9, );*/
+	}
+	
+	/**
+	 * Assigns a random illuminati card for each player
+	 */
+	private void assignIllumCard() {
+		Random rand = new Random();
+		for(int ii = 0; ii < player.length; ii++) {
+			PowerStructure ps = new PowerStructure(ii);
+			ps.add(illumCard.remove(rand.nextInt(illumCard.size())));
+			System.out.println(ps.get(0).getName());
+			player[ii].addPowerStructure(ps);
+		}
 	}
 }

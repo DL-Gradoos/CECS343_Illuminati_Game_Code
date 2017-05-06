@@ -39,8 +39,8 @@ public class Main extends StateBasedGame {
 		this.getState(GAME).init(gc, this);
 		this.getState(OPTIONS).init(gc, this);
 		this.getState(USER_MANUAL).init(gc, this);
-		
-		this.enterState(MENU);
+//Clean up
+		this.enterState(GAME);
 	}
 	
 	public static void main(String[] args) {

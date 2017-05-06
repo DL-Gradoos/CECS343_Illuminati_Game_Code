@@ -6,6 +6,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
+
+import com.alphainc.game.gameObjects.PowerStructure;
 /**
  * This class provides options for the player to take, also renders
  * their power structure.
@@ -25,6 +27,8 @@ public class PlayerGUI extends AbstractComponent {
 	private Image playerNum;
 	/** First roll */
 	private int firstDiceRoll;
+	/** The power structure tied to the player */
+	private PowerStructure powerStructure;
 	/** Should be rendered or not (play order) */
 	private boolean shouldBeRendered = false;
 	
@@ -100,5 +104,8 @@ public class PlayerGUI extends AbstractComponent {
 	
 	public boolean isRendered() {
 		return shouldBeRendered;
+	}
+	public void addPowerStructure(PowerStructure ps) {
+		powerStructure = ps;
 	}
 }
