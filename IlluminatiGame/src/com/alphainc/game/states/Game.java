@@ -67,7 +67,7 @@ private int counter;
 		
 //Clean up
 		counter = 0;
-		if(true/*Menu.players > 0*/) 
+		if(Menu.players > 0) 
 		{
 			bg = new Image("com/alphainc/res/gui/tabletop.png");
 
@@ -146,8 +146,8 @@ private int counter;
 		}
 		counter ++;*/
 		ilCards[0].render(container, g);
-		ilCards[1].render(container, g);
-		ilCards[2].render(container, g);
+		//ilCards[1].render(container, g);
+		//ilCards[2].render(container, g);
 		/*if(temp)
 		{
 			ilCards[0].render(container, g);
@@ -215,11 +215,11 @@ private int counter;
 			System.out.println("2. " +ilCards[1].getName() + " Arrow:"  
 			+ ilCards[1].getConnectedArrow() + " " + " Rotation: " + ilCards[1].getRotate());*/
 			
-			ilCards[0].rotate(90);
+			/*ilCards[0].rotate(90);
 			ilCards[1].setRotation(0);
 			ilCards[2].setRotation(0);
 			ilCards[0].connect(ilCards[1], 1, 0);
-			ilCards[1].connect(ilCards[2], 0, 2);
+			ilCards[1].connect(ilCards[2], 0, 2);*/
 		}
 	}
 	
@@ -240,7 +240,7 @@ private int counter;
 	private void initPlayers(GameContainer container) {
 //Clean up
 		//Player GUI's init
-		player = new PlayerGUI[2/*Menu.players*/];
+		player = new PlayerGUI[Menu.players];
 		for(int ii = 0; ii < player.length; ii++) {
 			player[ii] = new PlayerGUI(container, "Player " + (ii + 1), ii);
 		}

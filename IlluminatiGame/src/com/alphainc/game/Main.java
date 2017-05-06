@@ -40,7 +40,7 @@ public class Main extends StateBasedGame {
 		this.getState(OPTIONS).init(gc, this);
 		this.getState(USER_MANUAL).init(gc, this);
 //Clean up
-		this.enterState(GAME);
+		this.enterState(MENU);
 	}
 	
 	public static void main(String[] args) {
