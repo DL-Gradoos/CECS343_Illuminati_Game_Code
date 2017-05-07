@@ -8,6 +8,7 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 import com.alphainc.game.gameObjects.PowerStructure;
+import com.alphainc.game.states.Game;
 /**
  * This class provides options for the player to take, also renders
  * their power structure.
@@ -15,7 +16,8 @@ import com.alphainc.game.gameObjects.PowerStructure;
  * @author Daniel
  *
  */
-public class PlayerGUI extends AbstractComponent {
+public class PlayerGUI extends AbstractComponent 
+{
 	
 	/** The player this GUI is assigned to */
 	private String mPlayerName;
@@ -39,11 +41,12 @@ public class PlayerGUI extends AbstractComponent {
 		initSideBar();
 	}
 
-	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
+	public void render(GameContainer container, Graphics g) throws SlickException {
 		if(shouldBeRendered) {
-			g.drawImage(sideBar, 0, 0);
-			g.drawImage(playerNum, 100, 100);
+			
+			powerStructure.render(container, g);
+			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());
+			g.drawImage(playerNum, -Game.camera.getTopLeftX() + 50, -Game.camera.getTopLeftY() + 100);
 		}
 	}
 
@@ -107,5 +110,11 @@ public class PlayerGUI extends AbstractComponent {
 	}
 	public void addPowerStructure(PowerStructure ps) {
 		powerStructure = ps;
+	}
+
+	@Override
+	public void render(GUIContext container, Graphics g) throws SlickException {
+		// TODO Auto-generated method stub
+		
 	}
 }

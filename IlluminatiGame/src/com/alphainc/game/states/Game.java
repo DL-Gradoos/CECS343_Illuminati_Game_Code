@@ -42,7 +42,7 @@ public class Game extends BasicGameState implements KeyListener {
 	/** List of illumnati cards */
 	private List<StructureCard> illumCard;
 	/** When shifting the camera, keeps gui locked to side of screen */
-	private Camera camera;
+	public static Camera camera;
 	/** The players */
 	private PlayerGUI player[];
 	/** The dice rolls */
@@ -53,6 +53,8 @@ public class Game extends BasicGameState implements KeyListener {
 	private int turn = 0;
 	/** Iluminati Cards */
 	private StructureCard ilCards[];
+	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
+	private boolean cameraMovement [];
 	//Changes card displayed on space press
 	private boolean temp;
 	public Game(int id) {
@@ -132,6 +134,7 @@ private int counter;
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		g.translate(camera.getTopLeftX(), camera.getTopLeftY());
 		bg.draw();
 		/* Renders the current players gui */
 		for(int ii = 0; ii < player.length; ii++) {
@@ -145,7 +148,7 @@ private int counter;
 			counter = 0;
 		}
 		counter ++;*/
-		ilCards[0].render(container, g);
+		//ilCards[0].render(container, g);
 		//ilCards[1].render(container, g);
 		//ilCards[2].render(container, g);
 		/*if(temp)
@@ -159,16 +162,46 @@ private int counter;
 		
 		
 		/** TESTING IMAGES, CAN DELETE IF YOU WANT*/
-		card.draw(20, 20);
+		//card.draw(20, 20);
 		//card.drawCentered(100, 100);
-		card2.draw(20,20);
+		//card2.draw(20,20);
 		//g.drawImage(card, 100, 100);
 		//g.draw(card2, 100, 100);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		
+		//Move speed of the camera
+				float moveSpeed = delta * 0.2f;
+				//left
+				if(cameraMovement[0]) {
+					if(camera.getTopLeftX() > 1000)
+						camera.setCurrentTopLeftCoords(1000.999F, camera.getTopLeftY());
+					else
+						camera.adjustCoords(moveSpeed, 0);
+				}
+				//up
+				if(cameraMovement[1]) {
+					if(camera.getTopLeftY() > 600)
+						camera.setCurrentTopLeftCoords(camera.getTopLeftX(), 600.999F);
+					else
+						camera.adjustCoords(0, moveSpeed);
+				}
+				//right
+				if(cameraMovement[2]) {
+					if(camera.getTopLeftX() < -1000)
+						camera.setCurrentTopLeftCoords(-1000.999F, camera.getTopLeftY());
+					else
+						camera.adjustCoords(-moveSpeed, 0);
+				}
+				//down
+				if(cameraMovement[3]) {
+					if(camera.getTopLeftY() < -600)
+						camera.setCurrentTopLeftCoords(camera.getTopLeftX(), -600.999F);
+					else
+						camera.adjustCoords(0, -moveSpeed);
+				}
+				
 		
 	}
 
@@ -204,6 +237,8 @@ private int counter;
 				temp = true;
 			}
 			
+			
+			
 		}
 		else if(key == Input.KEY_F)
 		{
@@ -221,8 +256,27 @@ private int counter;
 			ilCards[0].connect(ilCards[1], 1, 0);
 			ilCards[1].connect(ilCards[2], 0, 2);*/
 		}
+		if(key == Input.KEY_LEFT || key == Input.KEY_A)
+			cameraMovement[0] = true;
+		if(key == Input.KEY_UP || key == Input.KEY_W)
+			cameraMovement[1] = true;
+		if(key == Input.KEY_RIGHT || key == Input.KEY_D)
+			cameraMovement[2] = true;
+		if(key == Input.KEY_DOWN || key == Input.KEY_S)
+			cameraMovement[3] = true;
 	}
 	
+	@Override
+	public void keyReleased(int key, char c) {
+		if(key == Input.KEY_LEFT || key == Input.KEY_A)
+			cameraMovement[0] = false;
+		if(key == Input.KEY_UP || key == Input.KEY_W)
+			cameraMovement[1] = false;
+		if(key == Input.KEY_RIGHT || key == Input.KEY_D)
+			cameraMovement[2] = false;
+		if(key == Input.KEY_DOWN || key == Input.KEY_S)
+			cameraMovement[3] = false;
+	}
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if(button == Input.MOUSE_LEFT_BUTTON) {
@@ -246,6 +300,7 @@ private int counter;
 		}
 		//Init Camera
 		camera = new Camera();
+		cameraMovement = new boolean[] {false, false, false, false};
 		//Init background image
 	}
 	/**
@@ -295,7 +350,7 @@ private int counter;
 		Deck deck = new Deck();
 		illumCard = deck.getIlluminatiDeck();
 		for(StructureCard sc : illumCard) {
-			sc.setPosition(container.getWidth() / 2 + 150, container.getHeight() / 2);
+			sc.setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105/*container.getWidth() / 2 + 150, container.getHeight() / 2*/);
 			sc.flip();
 		}
 		/*illumCard[0] = new IlluminatiCard("res/illumcards/thebavarianilluminati.png", 
@@ -306,7 +361,8 @@ private int counter;
 	/**
 	 * Assigns a random illuminati card for each player
 	 */
-	private void assignIllumCard() {
+	private void assignIllumCard() 
+	{
 		Random rand = new Random();
 		for(int ii = 0; ii < player.length; ii++) {
 			PowerStructure ps = new PowerStructure(ii);

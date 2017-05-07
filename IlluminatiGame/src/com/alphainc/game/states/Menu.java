@@ -203,7 +203,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 			{
 				start_game_menu = true;
 				options_menu = false;
-				System.out.println("Menu item one clicked.");
+				
 			}
 			
 		}
@@ -221,7 +221,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 				numPlayers = 1;
 				start_game_menu = false;
 				options_menu = true;
-				System.out.println("Menu item two clicked.");
+				
 			}
 			
 		}
@@ -232,14 +232,14 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		{
 			start_game_menu = false;
 			options_menu = false;
-			System.out.println("Menu item three clicked.");
+			
 		}
 		else if (x >= menuMouseOver[3].getX() 
 				&& x<= (menuMouseOver[3].getWidth()+menuMouseOver[3].getX())
 				&& y >= (menuMouseOver[3].getY()) 
 				&& y <= (menuMouseOver[3].getHeight() + menuMouseOver[3].getY()))
 		{
-			System.out.println("Menu item four clicked.");
+			
 			container.exit();
 		}
 	}

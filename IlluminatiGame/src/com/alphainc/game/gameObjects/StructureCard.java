@@ -704,7 +704,7 @@ public class StructureCard extends Card
 	}
 	public void render(GameContainer container, Graphics g) 
 	{
-			scaledCardImage.drawCentered(xCoords, yCoords);
+		scaledCardImage.drawCentered(xCoords, yCoords);
 
 	}
 	/**

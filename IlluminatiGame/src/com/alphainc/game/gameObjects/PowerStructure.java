@@ -12,7 +12,8 @@ import org.newdawn.slick.Graphics;
  * @author Daniel
  *
  */
-public class PowerStructure {
+public class PowerStructure 
+{
 	/** The player that this power structure belongs to */
 	private int mPowerStructureID;
 	/** An array list of renderable Structure Cards */
@@ -25,7 +26,9 @@ public class PowerStructure {
 	
 	public void render(GameContainer container, Graphics g) {
 		for(StructureCard c : cards) {
+			//implement get position
 			c.render(container, g);
+			//g.drawImage(c.getImage(0), c.getX(), c.getY());
 		}
 	}
 	

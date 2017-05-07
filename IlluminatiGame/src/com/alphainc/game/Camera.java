@@ -7,22 +7,27 @@ package com.alphainc.game;
 public class Camera {
 	
 	/** Current (0, 0) coords after potential shift */
-	private int mTopLeftX, mTopLeftY;
+	private float mTopLeftX, mTopLeftY;
 	
 	public Camera() {
 		mTopLeftX = mTopLeftY = 0;
 	}
 	
-	public void setCurrentTopLeftCoords(int x, int y) {
+	public void setCurrentTopLeftCoords(float x, float y) {
 		mTopLeftX = x;
 		mTopLeftY = y;
 	}
 	
-	public int getTopLeftX() {
+	public void adjustCoords(float x, float y) {
+		mTopLeftX += x;
+		mTopLeftY += y;
+	}
+	
+	public float getTopLeftX() {
 		return mTopLeftX;
 	}
 	
-	public int getTopLeftY() {
+	public float getTopLeftY() {
 		return mTopLeftY;
 	}
 }
