@@ -15,6 +15,8 @@ public class Arrow
 	private Arrow connectedTo;
 	/**The direction the arrow points, true for out, false for in.*/
 	private boolean direction;
+	/** Determines if this arrow exists or not */
+	private boolean exists;
 	
 	/**
 	 * Constructor for an arrow object.
@@ -24,9 +26,9 @@ public class Arrow
 	 * @param connectedTo The arrow it is connecting to.
 	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
 	 */
-	public Arrow(/*StructureCard card, */boolean connected, Arrow connectedTo, boolean direction)
+	public Arrow(boolean exists, boolean connected, Arrow connectedTo, boolean direction)
 	{
-		//this.card = card;
+		this.exists = exists;
 		this.connected = connected;
 		this.connectedTo = connectedTo;
 		this.direction = direction;

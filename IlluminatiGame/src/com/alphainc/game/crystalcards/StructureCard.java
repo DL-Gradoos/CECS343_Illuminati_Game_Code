@@ -29,9 +29,10 @@ public class StructureCard extends Card
 	/**The arrows on this card.*/
 	private Arrow[] arrows;
 	/** Card image */
-	private Image cardImage, cardImageBack, scaledCardImage, scaledCardImageBack;
+	private Image cardImage, scaledCardImage;
 	/** Card bounds */
 	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
+	private int rotated;
 	/** Coords */
 	private int xCoords, yCoords;
 	
@@ -59,6 +60,7 @@ public class StructureCard extends Card
 		this.treasury = 0;
 		this.arrows = arrows;
 		this.transferablePower = transferable;
+		this.rotated = 0;
 	}
 	
 	/**
@@ -232,6 +234,21 @@ public class StructureCard extends Card
 		}
 		return false;
 	}
+	/**
+	 * Gets whether or not this card has an open arrow.
+	 * @return True if this card has an open arrow, false otherwise.
+	 */
+	public boolean hasOpenInArrow()
+	{
+		for(Arrow a: arrows)
+		{
+			if(!a.isConnected() && !a.getDirection())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * Gets this card's name.
@@ -250,57 +267,380 @@ public class StructureCard extends Card
 	{
 		return attackPower;
 	}
-	
-	/**
-	 * Connects this card to another card to the next open arrow of both cards.
-	 * @param card The card this card will connect to.
-	 */
-	public void connect(StructureCard card)
+
+	public int getWidth()
 	{
-		if(hasOpenOutArrow())
-		{
-			Arrow arrow = getOpenOutArrow();
-			connect(arrow, card.getOpenInArrow());
-		}
-		else
-		{
-			System.out.println("This card does not have any open arrows to connect to.");
-		}
+		return scaledCardImage.getWidth();
 	}
-	
-	/**
-	 * Connects a specified arrow from this card to another card's
-	 * first open arrow.
-	 * @param connectWith The arrow to connect with.
-	 * @param card The card to connect with.
-	 */
-	public void connect(Arrow connectWith, StructureCard card)
+	public int getHeight()
 	{
-		//If the arrow is already connected, gives an error.
-		if(connectWith.isConnected())
+		return scaledCardImage.getHeight();
+	}
+/*//Clean up
+	public int getConnectedArrow()
+	{
+		for(int i = 0; i < arrows.length; i++)
 		{
-			System.out.println("Error, this arrow is not opened to connect with.");
+			if(arrows[i].isConnected())
+			{
+				return i;
+			}
 			
 		}
-		else
-		{
-			//Connects this arrow with the next open arrow.
-			connect(connectWith, card.getOpenInArrow());
-		}
+		return -1;
 	}
+	
+	public void removeConnections()
+	{
+		for(Arrow a: arrows)
+		{
+			a.removeConnection();
+		}
+	}*/
 	
 	/**
 	 * Connects this card's arrow to another card's arrow.
+	 * @param card The card you're connecting to.
 	 * @param connectTo The arrow this card's arrow is to be connected to.
 	 * @param connectWith The arrow this card has.
 	 */
-	public void connect(Arrow connectTo, Arrow connectWith)
+	public void connect(StructureCard card, int connectTo, int connectWith)
 	{
+		
 		//Tests if connectWith is an open out arrow and connectTo is an open in arrow
-		if(!connectWith.isConnected() && connectWith.getDirection() && !connectTo.getDirection() && connectTo.isConnected())
+		if(true/*!arrows[connectWith].isConnected() 
+				&& arrows[connectWith].getDirection() 
+				&& !card.getArrow(connectTo).getDirection()
+				&& !card.getArrow(connectTo).isConnected()*/)
 		{
-			connectWith.setConnection(connectTo);
-			connectTo.setConnection(connectWith);
+
+			//Connects
+			arrows[connectWith].setConnection(card.getArrow(connectTo));
+			card.getArrow(connectTo).setConnection(arrows[connectWith]);
+
+			if(rotated != 0)
+			{
+				if(rotated % 180 != 0)
+				{
+					//This card is rotated either 90 degrees or 270 degrees
+					
+					if(connectWith % 2 == 0) //This card's arrow is "technically" L/R
+					{
+						int xAdjust = 0;
+						//Rotate card connecting
+						if((connectWith == 0 && rotated == 90) 
+								|| (connectWith == 2 && rotated == 270)) //this = top or bottom, but really right 
+						{
+							if(connectTo == 0) //card = top
+							{
+								card.rotate(270);
+								xAdjust = card.getHeight()/2;
+							}
+							else if(connectTo == 2) //card = bottom
+							{
+								card.rotate(90);
+								xAdjust = card.getHeight()/2;
+							}
+							else if(connectTo == 1) //card = right
+							{
+								card.rotate(180);
+								xAdjust = card.getWidth()/2;
+							}
+							else
+							{
+								xAdjust = card.getWidth()/2;
+							}
+							
+							//Set card's new position
+							card.setPosition(xCoords + this.getHeight()/2 + xAdjust, yCoords);
+						}
+						else if((connectWith == 0 && rotated == 270) 
+								|| (connectWith == 2 && rotated == 90)) //this = top or bottom, but really left
+						{
+							if(connectTo == 0) //card = top
+							{
+								card.rotate(90);
+								xAdjust = card.getHeight()/2;
+							}
+							else if(connectTo == 2) //card = bottom
+							{
+								card.rotate(270);
+								xAdjust = card.getHeight()/2;
+							}
+							else if(connectTo == 3) //card = left
+							{
+								card.rotate(180);
+								xAdjust = card.getWidth()/2;
+							}
+							else
+							{
+								xAdjust = card.getWidth()/2;
+							}
+							
+							//Set card's new position
+							card.setPosition(xCoords - this.getHeight()/2 - xAdjust, yCoords);
+						}
+					}
+					else if (connectWith % 2 == 1) //Really T/B
+					{
+						int yAdjust = 0;
+						if((connectWith == 1 && rotated == 90) || (connectWith == 3 && rotated == 270))
+						{
+							//this = right/left, but really bottom
+							if(connectTo == 1) //card = right
+							{
+								card.rotate(270);
+								yAdjust = card.getWidth()/2;
+							}
+							else if(connectTo == 3) //card = left
+							{
+								card.rotate(90);
+								yAdjust = card.getWidth()/2;
+							}
+							else if(connectTo == 2) //card = bottom
+							{
+								card.rotate(180);
+								yAdjust = card.getHeight()/2;
+							}
+							else //card = top
+							{
+								yAdjust = card.getHeight()/2;
+							}
+							
+							//Set position
+							card.setPosition(xCoords, yCoords + yAdjust + getWidth()/2);
+						}
+						else if((connectWith == 1 && rotated == 270) || (connectWith == 3 && rotated == 90))
+						{
+							//this = right/left, but really top
+							if(connectTo == 1) //card = right
+							{
+								card.rotate(90);
+								yAdjust = card.getWidth()/2;
+							}
+							else if(connectTo == 3) //card = left
+							{
+								card.rotate(270);
+								yAdjust = card.getWidth()/2;
+							}
+							else if(connectTo == 0) //card = top
+							{
+								card.rotate(180);
+								yAdjust = card.getHeight()/2;
+							}
+							else //card = bottom
+							{
+								yAdjust = card.getHeight()/2;
+							}
+							
+							//Set position
+							card.setPosition(xCoords, yCoords - yAdjust - getWidth()/2);
+						}
+					}
+				}
+				else
+				{
+					//This card is flipped 180 degrees
+					if(connectWith == 0) //this = top, but really bottom
+					{
+						int yAdjust = 0;
+						if(connectTo == 1) //connecting to = right
+						{
+							card.rotate(270);
+							yAdjust = card.getWidth()/2;
+						}
+						else if(connectTo == 3) //connecting to = left
+						{
+							card.rotate(90);
+							yAdjust = card.getHeight()/2;
+						}
+						else if(connectTo == 2) //connecting to = bottom
+						{
+							card.rotate(180);
+							yAdjust = card.getHeight()/2;
+						}
+						else
+						{
+							yAdjust = card.getHeight()/2;
+						}
+						card.setPosition(xCoords, yCoords + getHeight()/2 + yAdjust);
+					}
+					else if(connectWith == 2) //This = bottom, but really top
+					{
+						int yAdjust = 0;
+						if(connectTo == 1) //connecting to = right
+						{
+							yAdjust = card.getWidth()/2;
+							card.rotate(90);
+						}
+						else if(connectTo == 3) //connecting to = left
+						{
+							yAdjust = card.getWidth()/2;
+							card.rotate(270);
+						}
+						else if(connectTo == 0) //Connecting to = top
+						{
+							card.rotate(180);
+							yAdjust = card.getHeight()/2;
+						}
+						else
+						{
+							yAdjust = card.getHeight()/2;
+						}
+						card.setPosition(xCoords, yCoords - getHeight()/2 - yAdjust);
+					}
+					else if(connectWith == 1) //This = right, but really left
+					{
+						int xAdjust = 0;
+						if(connectTo == 0) //connect to = top
+						{
+							card.rotate(90);
+							xAdjust = card.getHeight()/2;
+						}
+						else if(connectTo == 2) //Connect to = bottom
+						{
+							card.rotate(270);
+							xAdjust = card.getHeight()/2;
+						}
+						else if(connectTo == 3) //connect to = left
+						{
+							card.rotate(180);
+							xAdjust = card.getWidth()/2;
+						}
+						else
+						{
+							xAdjust = card.getWidth()/2;
+						}
+						card.setPosition(xCoords - xAdjust - getWidth()/2, yCoords);
+					}
+					else //This = left, but really right
+					{
+						int xAdjust = 0;
+						if(connectTo == 0) //connect to = top
+						{
+							card.rotate(270);
+							xAdjust = card.getHeight()/2;
+						}
+						else if(connectTo == 2) //Connect to = bottom
+						{
+							card.rotate(90);
+							xAdjust = card.getHeight()/2;
+						}
+						else if(connectTo == 1) //connect to = right
+						{
+							card.rotate(180);
+							xAdjust = card.getWidth()/2;
+						}
+						else
+						{
+							xAdjust = card.getWidth()/2;
+						}
+						card.setPosition(xCoords + xAdjust + getWidth()/2, yCoords);
+					}
+				}
+				
+				
+			}
+			else
+			{
+				//Checks to see if have to rotate card and check if this card is rotated
+				if(connectTo % 2 == 1 && connectWith % 2 == 0)
+				{
+					//Need to add/subtract half this height and add half width to get y coordinate
+					if(connectWith == 0 ) //this = top
+					{
+						if(connectTo == 1) //connecting to = right
+						{
+							card.rotate(90);
+						}
+						else //connecting to = left
+						{
+							card.rotate(270);
+						}
+						card.setPosition(xCoords, (yCoords - (scaledCardImage.getHeight()/2)) - (card.getWidth()/2));
+					}
+					else //This = bottom
+					{
+						if(connectTo == 1) //connecting to = right
+						{
+							card.rotate(270);
+						}
+						else //connecting to = left
+						{
+							card.rotate(90);
+						}
+						card.setPosition(xCoords, (yCoords + (scaledCardImage.getHeight()/2)) + (card.getWidth()/2));
+					}
+				}
+				else if (connectTo % 2 == 0 && connectWith % 2 == 1)
+				{
+					if(connectWith == 1) //This = right
+					{
+						if(connectTo == 0) //connect to = top
+						{
+							card.rotate(270);
+						}
+						else //Connect to = bottom
+						{
+							card.rotate(90);
+						}
+						card.setPosition(xCoords + (scaledCardImage.getWidth()/2) + (card.getWidth()/3), yCoords);
+					}
+					else //This = left
+					{
+						if(connectTo == 0) //connect to = top
+						{
+							card.rotate(90);
+							
+						}
+						else //Connect to = bottom
+						{
+							card.rotate(270);
+						}
+						card.setPosition(xCoords - (scaledCardImage.getWidth()/2) - (card.getWidth()/3), yCoords);
+					}
+				}
+				else
+				{
+					//The cards connecting are on the same "plane"
+					if(connectTo == connectWith)
+					{
+						//Rotate the card connecting to this card 180
+						card.rotate(180);
+					}
+					
+					//Sets new position of card
+					if(connectWith % 2 == 0)
+					{
+						int y = 0;
+						//The card is connecting at the top 
+						if(connectWith == 0)
+						{
+							y = yCoords - getHeight()/2 - card.getHeight()/2;
+						}
+						else //The card is connecting at the bottom
+						{
+							y = yCoords + getHeight()/2 + card.getHeight()/2;
+						}
+						card.setPosition(xCoords, y);
+					}
+					else
+					{
+						int x = 0;
+						if(connectWith == 1) //The card is connecting on the right
+						{
+							x = xCoords + getWidth()/2 + card.getWidth() / 2;
+						}
+						else //The card is connecting on the left
+						{
+							x = xCoords - getWidth()/2 - card.getWidth() / 2;
+						}
+						card.setPosition(x, yCoords);
+					}
+
+				}
+			}
+
 		}
 	}
 	public int getTransferablePower()
@@ -353,51 +693,67 @@ public class StructureCard extends Card
 	 * @return the card image
 	 */
 	public Image getImage(int choice) {
-		switch(choice) {
-			case 0:
-				return scaledCardImageBack;
-			case 1:
-				return scaledCardImage;
-		}
+		
 		return cardImage;
 	}
 	
-	public void setPosition(int x, int y) {
+	public void setPosition(int x, int y) 
+	{
 		xCoords = x;
 		yCoords = y;
 	}
-	
-	public int getX() {
-		return xCoords;
-	}
-	
-	public int getY() {
-		return yCoords;
-	}
-	
-	public void render(GameContainer container, Graphics g) {
-		if(isFlipped())
+	public void render(GameContainer container, Graphics g) 
+	{
 			scaledCardImage.drawCentered(xCoords, yCoords);
-		else
-			scaledCardImageBack.drawCentered(xCoords, yCoords);
+
 	}
-	
 	/**
-	 * Rotates image and scaled version by 90 degrees. Updates bounds.
+	 * Rotates image by specified amount
 	 */
-	public void rotate() {
-		cardImage.rotate(90);
-		scaledCardImage.rotate(90);
+	public void rotate(int amount) 
+	{
+		if(rotated+amount >= 360)
+		{
+			rotated = rotated + amount;
+			rotated = rotated % 360;
+			cardImage.rotate(amount);
+			scaledCardImage.rotate(amount);
+		}
+		else
+		{
+			rotated = rotated + amount;
+			cardImage.rotate(amount);
+			scaledCardImage.rotate(amount);
+		}
+		
 	}
-	
+	public void setRotation(int amount)
+	{
+		int diff = 360 - rotated;
+		if(amount >= 360)
+		{
+			rotated = amount % 360;
+		}
+		rotated = amount;
+		//Resets rotation to 0
+		cardImage.rotate(diff);
+		scaledCardImage.rotate(diff);
+		
+		//Rotates to this angle
+		cardImage.rotate(rotated);
+		scaledCardImage.rotate(rotated);
+		
+	}
+	public int getRotate()
+	{
+		return rotated;
+	}
 	private void initCardFace(String p) {
 		try {
 			cardImage = new Image(p);
-			cardImageBack = new Image("res/cards/illum/Illuminatiback.png");
 			cardWidth = cardImage.getWidth();
 			cardHeight = cardImage.getHeight();
 			scaledCardImage = new Image(p).getScaledCopy(0.5F);
-			scaledCardImageBack = new Image("res/cards/illum/Illuminatiback.png").getScaledCopy(0.5F);
 			scaledCardWidth = scaledCardImage.getWidth();
 			scaledCardHeight = scaledCardImage.getHeight();
 		} catch (SlickException se) {

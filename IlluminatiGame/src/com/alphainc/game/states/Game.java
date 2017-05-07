@@ -44,7 +44,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** Background */
 	private Image bg;
 	/** List of illumnati cards */
-	private List<StructureCard> illumCard;
+	private List<StructureCard> illumCard, groupCard, currentCenterCards;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	public static Camera camera;
 	/** The players */
@@ -55,10 +55,10 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private List<PlayerGUI> playerOrder;
 	/** Whose turn it is */
 	private int turn = 0;
-	/** Iluminati Cards */
-	private StructureCard ilCards[];
 	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
 	private boolean cameraMovement[];
+	/** Deck of cards */
+	private Deck deck;
 	
 	public Game(int id) {
 		mID = id;
@@ -69,18 +69,11 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		/** Initialize only when entered into from Menu state */
 		if(Menu.playerCountData.getPlayerCount() > 0) {
 			initIllumCards(container);
+			initGroupCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
 			assignIllumCard();
-			/*ilCards = new IlluminatiCard[8];
-			ilCards[0] = new IlluminatiCard("res/cards/thenetwork.png", "The Network", "special", 10, 9,
-						 new Arrow[] {
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true)
-						 });
-			ilCards[0].setPosition(400, 200);*/
+			
 			
 			
 			
@@ -106,21 +99,12 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
 		}
-		//for(StructureCard sc : illumCard) sc.render(container, g);
-		
-		/** TESTING IMAGES, CAN DELETE IF YOU WANT*/
-		/*card.draw(20, 20);
-		//card.drawCentered(100, 100);
-		card2.draw(20,20);
-		//g.drawImage(card, 100, 100);
-		//g.draw(card2, 100, 100);
-		ilCards[0].render(container, g);*/
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		//Move speed of the camera
-		float moveSpeed = delta * 0.2f;
+		float moveSpeed = delta * 0.3f;
 		//left
 		if(cameraMovement[0]) {
 			if(camera.getTopLeftX() > 1000)
@@ -270,15 +254,16 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	 * Initializes Illuminati Cards
 	 */
 	private void initIllumCards(GameContainer container) {
-		Deck deck = new Deck();
+		deck = new Deck();
 		illumCard = deck.getIlluminatiDeck();
 		for(StructureCard sc : illumCard) {
 			sc.setPosition(container.getWidth() / 2 + 150, container.getHeight() / 2);
 			sc.flip();
 		}
-		/*illumCard[0] = new IlluminatiCard("res/illumcards/thebavarianilluminati.png", 
-				"The Bavarian Illuminati", "May make one privileged attack each turn at a cost of 5MB.",
-				10, 9, );*/
+	}
+	
+	private void initGroupCards(GameContainer container) {
+		groupCard = deck.getGroupDeck();
 	}
 	
 	/**

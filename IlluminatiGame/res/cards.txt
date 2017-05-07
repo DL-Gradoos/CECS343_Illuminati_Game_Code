@@ -1,3 +1,4 @@
+8
 thebavarianIlluminati.png,The Bavarian Illuminati,May make one privileged attack each turn at a cost of 5MB.,10,9
 thebermudatriangle.png,The Bermuda Triangle,May reorganize groups freely at end of turn.,8,9
 thediscordiansociety.png,The Discordian Society,+4 on any attempt to control Weird groups; immune to any attacks from Government or Straight groups,8,8
@@ -6,3 +7,103 @@ thenetwork.png,The Network,Turns over two cards at beginning of turn,7,9
 theservantsofcthulu.png,The Servants of Cthulhu,+2 on any attempt to destroy any group,9,7
 thesocietyofassassins.png,The Society of Assassins,+4 on any attempt to neutralize any group,8,8
 theufos.png,The UFOs,Illuminati group may participate in two attacks per turn,6,8
+83
+americanautoduel.png,American Autoduel Association,none,1,5,1,null,out,null,in,false,false,0,Violent,Weird
+antinuclearactivists.png,Anti-Nuclear Activists,+2 on any attempt to destroy Nuclear Power Companies,2,5,1,out,null,null,in,false,false,0,Liberal
+antiwaractivists.png,Antiwar Activists,none,0,3,1,null,null,null,in,false,false,0,Peaceful,Liberal
+bigmedia.png,Big Media,none,4,6,3,out,in,out,out,false,false,3,Liberal,Straight
+boysprouts.png,Boy Sprouts,none,0,3,1,null,null,null,in,false,false,0,Straight,Peaceful
+california.png,California,none,5,4,5,out,null,out,in,false,false,0,Liberal,Weird,Government
+cflaio.png,CFL-AIO,none,6,5,3,out,in,out,out,false,false,0,Liberal
+chinesecampaigndonors.png,Chinese Campaign Donors,Treat this group as Government when it attempts to control a Government group,3,2,3,out,in,out,null,false,false,0,Communist
+cia.png,C.I.A.,none,6,5,0,out,in,out,out,false,false,4,Government,Violent
+clonearrangers.png,Clone Arrangers,+3 on any attempt to destroy any group,6,6,1,null,out,out,in,false,false,2,Violent,Communist,Criminal
+comicbooks.png,Comic Books,none,1,1,2,out,null,null,in,false,false,0,Weird,Violent
+congressionalwives.png,Congressional Wives,none,1,4,1,null,out,null,in,false,false,0,Conservative,Straight
+conveniencestores.png,Convenience Stores,none,1,4,3,null,null,out,in,false,false,0,Straight
+copyshops.png,Copy Shops,none,1,3,4,null,in,null,out,false,false,0,Peaceful
+cyclegangs.png,Cycle Gangs,+2 on any attempt to destroy any group,0,4,0,null,null,null,in,false,false,0,Violent,Weird
+democrats.png,Democrats,none,5,4,3,null,in,out,out,false,false,0,Liberal
+ecoguerilla.png,Eco-Guerrillas,none,0,6,1,null,in,null,null,false,false,0,Liberal,Violent,Weird
+emptyvee.png,Empty Vee,none,3,3,4,null,in,out,out,false,false,0,none
+evilgeniusesforabettertomorrow.png,Evil Geniuses for a Better Tomorrow,+4 for any attempt to control or neutralize or destroy the Orbital Mind Control Lasers.,0,6,3,null,in,null,null,false,false,2,Violent,Weird
+fastfoodchains.png,Fast Food Chains,none,2,4,3,null,null,out,in,false,false,0,Straight
+fbi.png,F.B.I.,none,4,6,0,out,in,out,null,false,false,2,Government,Straight
+federalreserve.png,Federal Reserve,When it transfers money that money can go to any group in the same Power Structure.,5,7,6,out,out,null,in,false,false,3,Government
+feminists.png,Feminists,+3 on any attempt to control any Liberal group.,2,2,1,null,null,out,in,false,false,0,Liberal
+fiendishflouridators.png,Fiendish Flouridators,none,3,5,1,out,out,null,in,false,false,0,Communist,Fanatic
+flatearthers.png,Flat Earthers,none,1,2,1,null,in,null,out,false,false,0,Weird,Conservative
+fnordmotorcompany.png,Fnord Motor Company,none,2,4,2,null,out,null,in,false,false,0,Peaceful
+fraternal.png,Fraternal Orders,none,3,5,2,out,in,null,null,false,false,0,Conservative
+girliemagazines.png,Girlie Magazines,none,2,2,3,null,in,out,null,false,false,0,Liberal
+goldfishfanciers.png,Goldfish Fanciers,none,0,4,1,null,null,null,in,false,false,0,Peaceful,Fanatic
+gunlobby.png,Gun Lobby,Normal resistance 3; against any Liberal or Communist or Weird group resistance 10.,1,3,1,null,in,out,out,false,false,0,Conservative,Violent
+hackers.png,Hackers,+2 on any attempt to neutralize any group.,1,4,2,out,in,null,null,false,false,1,Weird,Fanatic
+healthfoodstores.png,Health Food Stores,+2 on any attempt to control Anti-Nuclear Activists.,1,3,2,null,null,out,in,false,false,0,Liberal
+hollywood.png,Hollywood,none,2,0,5,null,out,out,in,false,false,0,Liberal
+intellectuals.png,Intellectuals,none,0,3,1,null,null,null,in,false,false,0,Weird,Fanatic
+internationalcocainesmugglers.png,International Cocaine Smugglers,+4 on any attempt to control Punk Rockers or Cycle Gangs or Hollywood.,3,5,5,out,out,out,in,false,false,0,Criminal
+internationalcommunistconspiracy.png,International Communist Conspiracy,+3 on any attempt to control any Communist group.,7,8,6,out,in,out,out,false,false,0,Communist
+irs.png,I.R.S.,Owning player may tax each opponent 2MB on his own income phase. Tax may come from any group. If a player has no money then s/he owes me tax.,5,5,0,out,in,out,null,false,false,3,Criminal,Government
+junkmail.png,Junk Mail,+4 on any attempt to control the Post Office.,1,3,2,out,in,null,null,false,false,0,Criminal
+kgb.png,KGB,+2 on any attempt to destroy any group,2,6,0,null,in,out,null,false,false,2,Communist,Violent
+kkk.png,KKK,none,2,5,1,null,in,out,null,false,false,0,Conservative,Violent
+l4society.png,L-4 Society,+4 for direct control or neutralization or destruction of Orbital Mind Control Lasers.,1,2,0,null,in,null,out,false,false,0,Weird
+libertarians.png,Libertarians,none,1,4,1,out,null,null,in,false,false,0,Fanatic
+loansharks.png,Loan Sharks,none,5,5,6,null,out,null,in,false,false,0,Criminal,Violent
+localpolicedepartments.png,Local Police Departments,none,0,4,1,null,null,null,in,false,false,0,Conservative,Straight,Violent
+madisonavenue.png,Madison Avenue,+5 on any attempt to control Big Media or Empty Vee.,3,3,2,null,in,out,out,false,false,3,none
+militia.png,Militia,+6 on any attempt to destroy any Communist group.,2,4,2,out,in,null,out,false,false,0,Violent,Conservative
+moonies.png,Moonies,none,2,4,3,out,null,null,in,false,false,0,Peaceful,Fanatic
+moralminority.png,Moral Minority,none,2,1,2,null,in,out,null,false,false,0,Conservative,Straight,Fanatic
+morticians.png,Morticians,none,0,4,1,null,in,null,null,false,false,0,Straight,Peaceful
+multinationaloilcompanies.png,Multinational Oil Companies,none,6,4,8,out,out,out,in,false,false,0,none
+nephewsofgod.png,Nephews of God,none,0,4,2,null,in,null,null,false,false,0,Conservative,Fanatic
+newyork.png,New York,none,7,8,3,out,in,out,out,false,false,0,Violent,Criminal,Government
+nuclearpowercompanies.png,Nuclear Power Companies,none,4,4,3,null,in,null,out,false,false,0,Conservative
+orbitalmindcontrollasers.png,Orbital Mind Control Lasers,On his turn the owner can add or remove or reverse an alignment of any one other group in play; change lasts for that turn only.,4,5,0,out,out,null,in,false,false,2,Communist
+parentteacheragglomeration.png,Parent/Teacher Agglomeration,none,0,5,1,null,null,null,in,false,false,0,Peaceful,Conservative,Straight
+pentagon.png,Pentagon,none,6,6,2,out,in,out,out,false,false,0,Government,Violent,Straight
+phonephreaks.png,Phone Phreaks,+3 on any attempt to control or neutralize or destroy the Phone Company.,0,1,1,null,null,null,in,false,false,1,Criminal,Liberal
+postoffice.png,Post Office,none,4,3,-1,null,in,out,null,false,false,3,Government
+professionalsports.png,Professional Sports,none,2,4,3,null,out,out,in,false,false,0,Violent,Fanatic
+psychiatrists.png,Psychiatrists,none,0,6,2,null,in,null,null,false,false,0,Weird
+punkrockers.png,Punk Rockers,none,0,4,1,null,null,null,in,false,false,0,Weird
+recyclers.png,Recyclers,Pay 5 MB from this group to draw an extra card on your turn. This is not an action.,2,2,3,null,in,null,out,false,false,0,Liberal
+republicans.png,Republicans,none,4,4,4,out,in,out,out,false,false,0,Conservative
+robotseamonsters.png,Robot Sea Monsters,none,0,6,2,null,in,null,null,false,false,0,Violent,Communist
+sciencefictionfans.png,Science Fiction Fans,+2 on any attempt to control any Weird group.,0,5,1,null,null,null,in,false,false,0,Weird
+semiconciousliberationarmy.png,Semiconcious Liberation Army,+1 on any attempt to destroy any group.,0,8,0,null,null,null,in,false,false,0,Criminal,Violent,Liberal,Weird,Communist
+smof.png,S.M.O.F.,+5 for direct control of S.F. Fans. +2 for direct control of Trekkies.,1,1,0,out,in,out,null,false,false,0,Weird
+societyforcreativeanarchism.png,Society for Creative Anarchism,none,0,4,1,null,in,null,null,false,false,0,Violent,Weird
+southamericannazis.png,South American Nazis,none,4,6,2,out,in,out,null,false,false,0,Conservative,Violent
+survivalists.png,Survivalists,+2 Resistance to all owner's other groups.,0,6,2,null,in,null,null,false,false,0,Conservative,Violent,Fanatic
+tabloids.png,Tabloids,+3 for direct control of Convenience Stores.,2,3,3,out,in,null,null,false,false,0,Weird
+texas.png,Texas,none,6,6,4,out,out,null,in,false,false,0,Violent,Conservative,Government
+themafia.png,The Mafia,_3 for direct control of any Criminal group.,7,7,6,out,in,out,out,false,false,0,Criminal,Violent
+themeninblack.png,The Men In Black,none,0,6,1,null,null,null,in,false,false,2,Criminal,Weird
+thephonecompany.png,The Phone Company,none,5,6,3,null,out,out,in,false,false,2,none
+theunitednations.png,The United Nations,none,1,3,3,null,null,out,in,false,false,0,Liberal
+tobaccoandliquorcompanies.png,Tobacco & Liquor Companies,none,4,3,3,out,in,null,out,false,false,0,Straight
+trekkies.png,Trekkies,none,0,4,3,null,in,null,null,false,false,0,Weird,Fanatic
+triliberalcommission.png,Triliberal Commission,none,5,6,3,out,in,out,null,false,false,0,Liberal,Straight
+tvpreachers.png,TV Preachers,+3 for direct control of the Moral Minority.,3,6,4,null,in,out,out,false,false,0,Straight,Fanatic
+undergroundnewspapers.png,Underground Newspapers,none,1,5,0,out,in,null,null,false,false,1,Communist,Liberal
+videogames.png,Video Games,+3 for direct control of Covenience Stores.,2,3,7,null,in,out,null,false,false,0,none
+yuppies.png,Yuppies,none,1,4,5,null,in,out,null,false,false,1,Conservative
+15
+assassination.png,Assassination,Play this card immediately after the dice are rolled on any attempt [by any player] to destroy or control or neutralize. That roll is immediately changed - retroactively - to a 2.,false
+bribery.png,Bribery,Play this card during your turn to automatically take control of any one uncontrolled group. Play this card counts as an action.,false
+computerespionage.png,Computer Espionage,Play this card at any time to either count the money on any one group card OR examine all of one player's special cards.,false
+deepagent.png,Deep Agent,Play this card after privilege has been invoked. The privilege is totally abolished. That attack cannot be made privileged.,false
+interference.png,Interference,You may interfere with one privileged attack. No other players may interfere.,false
+marketmanipulation.png,Market Manipulation,Play this card during your income phase to double all your groups' incomes for that turn only. This card does not allow the I.R.S. to collect twice or require the Post Office to pay twice., false
+mediacampaign.png,Media Campaign,Play this card at any time to revive a group from the "dead" pile. It becomes uncontrolled. [If the Servants of Cthulu destroyed the group - it still counts as a destroyed group for victory. If they destroy it again - it counts again!],false
+murphyslaw.png,Murphy's Law,Play this card immediately after the dice are rolled on any attempt [by any player] to destroy or control or neutralize. That roll is immediately changed - retroactively - to a 12.,false
+privilegedinterference.png,Privileged Interference,You may interfere with one privileged attack. No other players may interfere.,false
+secretsmanwasnnottoknow.png,Secrets Man Was Not Meant To Know,Play this card when any other Special card is played - for ANY purpose. That card is immediately neutralized; it has no effect. Both cards are discarded.,false
+senateinvestigatingcommittee.png,Senate Investigating Committee,Play this card at the beginning of any other player's turn. That player loses his turn completely.
+slushfund.png,Slush Fund,Exchange this card - at any time - for 15MB to be placed in your Illuminati treasury.,false
+swissbankaccount.png,Swiss Bank Account,Exchange this card - at any time - for 25 MB to be placed in your Illuminati treasury.,false
+whisperingcampaign.png,Whispering Campaign,You may attempt to destroy a single group with Power 0. Roll attacking power vs. defending resistance - but a successful attack destroys the target. Playing this card is not an action - but this attack itself is an action.,false
+whitecollarcrime.png,White Collar Crime,Play this card at any time to reorganize all your money freely - that is - any amount[s] may be moved between any groups. You also get an extra 5MB which may be placed anywhere.,false
