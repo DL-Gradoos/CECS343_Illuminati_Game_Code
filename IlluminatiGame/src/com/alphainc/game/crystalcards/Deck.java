@@ -7,20 +7,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Used for instantiating all of the cards.
+ * @author Daniel
+ *
+ */
 public class Deck {
-	
+	/** List of Illuminati Cards */
 	private List<StructureCard> illumCard;
+	/** List of Group Cards */
 	private List<StructureCard> groupCard;
+	/** List of Special Cards */
 	private List<StructureCard> specialCard;
-	
+	/**
+	 * Constructor
+	 */
 	public Deck() {
 		illumCard = new ArrayList<StructureCard>();
 		groupCard = new ArrayList<StructureCard>();
 		specialCard = new ArrayList<StructureCard>();
 		read();
 	}
-	
+	/**
+	 * Reads in card data from text file
+	 */
 	private void read() {
 		BufferedReader br = null;
 		try {

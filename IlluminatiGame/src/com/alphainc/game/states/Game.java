@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -15,13 +17,17 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
+import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.alphainc.game.Camera;
 import com.alphainc.game.Main;
+import com.alphainc.game.components.MessageBox;
+import com.alphainc.game.components.MovableMouseOverArea;
 import com.alphainc.game.crystalcards.Arrow;
 import com.alphainc.game.crystalcards.Deck;
+import com.alphainc.game.crystalcards.GroupCard;
 import com.alphainc.game.crystalcards.IlluminatiCard;
 import com.alphainc.game.crystalcards.IlluminatiCardWrapper;
 import com.alphainc.game.crystalcards.PowerStructure;
@@ -44,7 +50,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** Background */
 	private Image bg;
 	/** List of illumnati cards */
-	private List<StructureCard> illumCard, groupCard, currentCenterCards;
+	private List<StructureCard> illumCard, groupCard;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	public static Camera camera;
 	/** The players */
@@ -55,10 +61,22 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private List<PlayerGUI> playerOrder;
 	/** Whose turn it is */
 	private int turn = 0;
+	/** The previous turn */
+	private int prevTurn;
 	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
 	private boolean cameraMovement[];
 	/** Deck of cards */
 	private Deck deck;
+	/** TESTING (DANIEL) */
+	private MessageBox msgBox;
+	/** Action button images */
+	private Image buttonImage[];
+	/** Action buttons */
+	private MovableMouseOverArea buttons[];
+	/** Number of actions left */
+	private int actions = 2;
+	/** The four uncontrolled Groups in play */
+	private StructureCard currentCenterCards[];
 	
 	public Game(int id) {
 		mID = id;
@@ -68,14 +86,14 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		/** Initialize only when entered into from Menu state */
 		if(Menu.playerCountData.getPlayerCount() > 0) {
+			initMessageBox();
 			initIllumCards(container);
 			initGroupCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
 			assignIllumCard();
-			
-			
-			
+			initSideBarButtons(container);
+			initCurrentCenterCards();
 			
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
 			/*card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
@@ -99,6 +117,9 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
 		}
+		renderSideBarElements(container, g);
+		msgBox.render(container, g);
+		renderCurrentCenterCards(container, g);
 	}
 
 	@Override
@@ -134,6 +155,20 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 				camera.adjustCoords(0, -moveSpeed);
 		}
 		
+		/* Sequence of play */
+		if(actions != 0) {
+			
+		} else if (actions == 0) {
+			/* If there are no more actions, change the player turn */
+			//prevTurn = turn;
+			playerOrder.get(turn).setShouldBeRendered(false);
+			turn = ((turn + 1) > player.length - 1) ? 0 : turn + 1;
+			/* Reset the number of actions available */
+			actions = 2;
+		}
+		/*if(prevTurn != turn) {
+			prevTurn = turn;
+		}*/
 	}
 
 	@Override
@@ -145,6 +180,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	public void keyPressed(int key, char c) {
 		/* Go to next player's turn */
 		if(key == Input.KEY_SPACE) {
+			prevTurn = turn;
 			playerOrder.get(turn).setShouldBeRendered(false);
 			turn = ((turn + 1) > player.length - 1) ? 0 : turn + 1;
 			/*if((turn + 1) > (player.length - 1))	
@@ -161,6 +197,13 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			cameraMovement[2] = true;
 		if(key == Input.KEY_DOWN || key == Input.KEY_S)
 			cameraMovement[3] = true;
+		
+		
+		
+		if(key == Input.KEY_O)
+			msgBox.scrollUp();
+		if(key == Input.KEY_L)
+			msgBox.scrollDown();
 	}
 	
 	@Override
@@ -181,12 +224,39 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			for(StructureCard sc : illumCard)
 				sc.flip();
 			//ilCards[0].flip();
+			
 		}
+//		System.out.printf("%s < x < %s\n%s < y < %s\n", -camera.getTopLeftX() + 100, 
+//				-camera.getTopLeftX() + 100 + buttonImage[0].getWidth(),
+//				-camera.getTopLeftY() + 300,
+//				-camera.getTopLeftY() + 300 + buttonImage[0].getHeight());
+//		System.out.println("");
+//		if(button == Input.MOUSE_LEFT_BUTTON && x > (/*-camera.getTopLeftX() + */100) && x < (/*-camera.getTopLeftX() + */100 + buttonImage[0].getWidth())
+//				&& y > (/*-camera.getTopLeftY() + */300) && y < (/*-camera.getTopLeftY() + */300 + buttonImage[0].getHeight())) {
+//			System.out.println(true);
+//		} else {
+//			System.out.println(false);
+//		}
 	}
 	
 	@Override
 	public void componentActivated(AbstractComponent source) {
-		
+		//Attack
+		if(source == buttons[0]) {
+			
+		}
+		//Transfer Money
+		if(source == buttons[1]) {
+			
+		}
+		//Move a Group
+		if(source == buttons[2]) {
+			
+		}
+		//Give a Group Away
+		if(source == buttons[3]) {
+			
+		}
 	}
 	
 	/**
@@ -209,6 +279,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			System.err.println("COULD NOT LOAD IMAGE");
 			e.printStackTrace();
 		}
+		prevTurn = player.length - 1;
 	}
 	/**
 	 * "Rolls 2 die" according to how many players there are and assigns turn order
@@ -233,6 +304,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			player[ii].setRoll(currentNum);
 			playerOrder.add(player[ii]);
 			orderRoll[ii] = currentNum;
+			msgBox.addMessage("Player " + (ii + 1) + " has rolled: " + currentNum);
 		}
 		/* Sorts from highest to lowest */
 		Collections.sort(playerOrder, new Comparator<PlayerGUI>() {
@@ -245,6 +317,19 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			
 		});
 		playerOrder.get(0).setShouldBeRendered(true);
+		/* Messages for player order */
+		msgBox.addMessage("\n");
+		for(int ii = 0; ii < playerOrder.size(); ii++) {
+			if(ii == 0)
+				msgBox.addMessage("Player " + playerOrder.get(ii).getPlayerID() + " will go 1st!");
+			else if(ii == 1)
+				msgBox.addMessage("Player " + playerOrder.get(ii).getPlayerID() + " will go 2nd!");
+			else if(ii == 2)
+				msgBox.addMessage("Player " + playerOrder.get(ii).getPlayerID() + " will go 3rd!");
+			else
+				msgBox.addMessage("Player " + playerOrder.get(ii).getPlayerID() + " will go " + (ii + 1) + "th!");
+				
+		}
 		//System.out.println("Turn order:");
 		//for(PlayerGUI p : playerOrder) System.out.println(p.getPlayerName() + " " + p.getRoll());
 	}
@@ -264,6 +349,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	
 	private void initGroupCards(GameContainer container) {
 		groupCard = deck.getGroupDeck();
+		Collections.shuffle(groupCard);
 	}
 	
 	/**
@@ -276,6 +362,52 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			ps.add(illumCard.remove(rand.nextInt(illumCard.size())));
 			System.out.println(ps.get(0).getName());
 			player[ii].addPowerStructure(ps);
+		}
+	}
+	
+	private void initMessageBox() {
+		msgBox = new MessageBox();
+	}
+	
+	private void initSideBarButtons(GameContainer container) {
+		buttonImage = new Image[4];
+		buttons = new MovableMouseOverArea[4];
+		try {
+			int space = 300;
+			for(int ii = 0; ii < 4; ii++) {
+				buttonImage[ii] = new Image("res/gui/attack.png").getScaledCopy(0.3F);
+				buttons[ii] = new MovableMouseOverArea(container, buttonImage[ii], (int) (-camera.getTopLeftX() + 100), (int) (-camera.getTopLeftY() + space), buttonImage[ii].getWidth(),
+						buttonImage[ii].getHeight(), this);
+				buttons[ii].setNormalColor(new Color(1, 1, 1, 0.5F));
+				buttons[ii].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+				space += 50;
+			}
+		} catch (SlickException e) {
+			System.err.println("SIDE BAR IMAGES NOT LOADED");
+			e.printStackTrace();
+		}
+	}
+	
+	private void renderSideBarElements(GameContainer container, Graphics g) {
+		int space = 300;
+		for(int ii = 0; ii < buttons.length; ii++) {
+			buttons[ii].updateLocation(-camera.getTopLeftX() + 100, -camera.getTopLeftY() + space);
+			buttons[ii].render(container, g);
+			space += 50;
+		}
+	}
+	
+	private void initCurrentCenterCards() {
+		currentCenterCards = new GroupCard[4];
+		for(int ii = 0; ii < currentCenterCards.length; ii++)
+			currentCenterCards[ii] = groupCard.remove(ii);
+	}
+	
+	private void renderCurrentCenterCards(GameContainer container, Graphics g) {
+		int spacing = 0;
+		for(int ii = 0; ii < currentCenterCards.length; ii++) {
+			g.drawImage(currentCenterCards[ii].getImage(0), 500 + spacing, 100);
+			spacing += 150;
 		}
 	}
 }

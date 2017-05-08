@@ -694,7 +694,7 @@ public class StructureCard extends Card
 	 */
 	public Image getImage(int choice) {
 		
-		return cardImage;
+		return scaledCardImage;
 	}
 	
 	public void setPosition(int x, int y) 
@@ -704,8 +704,7 @@ public class StructureCard extends Card
 	}
 	public void render(GameContainer container, Graphics g) 
 	{
-			scaledCardImage.drawCentered(xCoords, yCoords);
-
+		scaledCardImage.drawCentered(xCoords, yCoords);
 	}
 	/**
 	 * Rotates image by specified amount

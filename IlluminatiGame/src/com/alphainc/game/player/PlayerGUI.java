@@ -5,7 +5,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.gui.MouseOverArea;
 
 import com.alphainc.game.crystalcards.PowerStructure;
 import com.alphainc.game.states.Game;
@@ -33,11 +35,13 @@ public class PlayerGUI extends AbstractComponent {
 	/** The power structure tied to the player */
 	private PowerStructure powerStructure;
 	
+	
 	public PlayerGUI(GameContainer container, String playerName, int playerId) {
 		super(container);
 		mPlayerName = playerName;
 		mPlayerID = playerId;
 		initSideBar();
+		initButtons();
 	}
 	
 	public void render(GameContainer container, Graphics g) throws SlickException {
@@ -91,9 +95,15 @@ public class PlayerGUI extends AbstractComponent {
 		try {
 			sideBar = new Image("res/gui/playergui2.png");
 			playerNum = new Image("res/playercounter/playercounter" + (mPlayerID + 1) + ".png").getScaledCopy(0.2F);
+			
+			
 		} catch(SlickException se) {
 			System.err.println("COULD NOT LOAD SIDE BAR FOR " + mPlayerName);
 		}
+	}
+	
+	private void initButtons() {
+		
 	}
 	
 	public String getPlayerName() {
@@ -118,5 +128,9 @@ public class PlayerGUI extends AbstractComponent {
 	
 	public void addPowerStructure(PowerStructure ps) {
 		powerStructure = ps;
+	}
+	
+	public int getPlayerID() {
+		return mPlayerID + 1;
 	}
 }
