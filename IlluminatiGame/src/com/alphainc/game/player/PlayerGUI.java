@@ -47,7 +47,7 @@ public class PlayerGUI extends AbstractComponent {
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		if(shouldBeRendered) {
 			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());
-			g.drawImage(playerNum, -Game.camera.getTopLeftX() + 50, -Game.camera.getTopLeftY() + 100);
+			g.drawImage(playerNum, -Game.camera.getTopLeftX() + 80, -Game.camera.getTopLeftY() + 50);
 			powerStructure.render(container, g);
 		}
 	}

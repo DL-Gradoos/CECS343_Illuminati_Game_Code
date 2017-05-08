@@ -50,7 +50,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** Background */
 	private Image bg;
 	/** List of illumnati cards */
-	private List<StructureCard> illumCard, groupCard;
+	private List<StructureCard> illumCard, groupCard, currentCenterCards;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	public static Camera camera;
 	/** The players */
@@ -76,7 +76,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** Number of actions left */
 	private int actions = 2;
 	/** The four uncontrolled Groups in play */
-	private StructureCard currentCenterCards[];
+	//private StructureCard currentCenterCards[];
 	
 	public Game(int id) {
 		mID = id;
@@ -86,7 +86,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		/** Initialize only when entered into from Menu state */
 		if(Menu.playerCountData.getPlayerCount() > 0) {
-			initMessageBox();
+			initMessageBox(container);
 			initIllumCards(container);
 			initGroupCards(container);
 			initPlayers(container);
@@ -94,7 +94,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			assignIllumCard();
 			initSideBarButtons(container);
 			initCurrentCenterCards();
-			
+			msgBox.addMessage("THIS IS MORE THAN 30 CHARACTERS WHAT WILL THE PROGRAM DO?");
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
 			/*card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
 			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
@@ -257,6 +257,12 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		if(source == buttons[3]) {
 			
 		}
+		//MessageBox Down Arrow
+		if(source == msgBox.getDownArrow())
+			msgBox.scrollDown();
+		//MessageBox Up Arrow
+		if(source == msgBox.getUpArrow())
+			msgBox.scrollUp();
 	}
 	
 	/**
@@ -365,8 +371,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		}
 	}
 	
-	private void initMessageBox() {
-		msgBox = new MessageBox();
+	private void initMessageBox(GameContainer container) {
+		msgBox = new MessageBox(container, this);
 	}
 	
 	private void initSideBarButtons(GameContainer container) {
@@ -391,22 +397,22 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private void renderSideBarElements(GameContainer container, Graphics g) {
 		int space = 300;
 		for(int ii = 0; ii < buttons.length; ii++) {
-			buttons[ii].updateLocation(-camera.getTopLeftX() + 100, -camera.getTopLeftY() + space);
+			buttons[ii].updateLocation(-camera.getTopLeftX() + 80, -camera.getTopLeftY() + space);
 			buttons[ii].render(container, g);
 			space += 50;
 		}
 	}
 	
 	private void initCurrentCenterCards() {
-		currentCenterCards = new GroupCard[4];
-		for(int ii = 0; ii < currentCenterCards.length; ii++)
-			currentCenterCards[ii] = groupCard.remove(ii);
+		currentCenterCards = new ArrayList<StructureCard>();
+		for(int ii = 0; ii < 4; ii++)
+			currentCenterCards.add(groupCard.remove(ii));
 	}
 	
 	private void renderCurrentCenterCards(GameContainer container, Graphics g) {
 		int spacing = 0;
-		for(int ii = 0; ii < currentCenterCards.length; ii++) {
-			g.drawImage(currentCenterCards[ii].getImage(0), 500 + spacing, 100);
+		for(int ii = 0; ii < currentCenterCards.size(); ii++) {
+			g.drawImage(currentCenterCards.get(ii).getImage(0), 500 + spacing, 100);
 			spacing += 150;
 		}
 	}
