@@ -37,6 +37,18 @@ public class PowerStructure
 		return cards.get(index);
 	}
 	
+	public void addIncomeToCard(int index)
+	{
+		cards.get(index).addIncome();
+	}
+	
+	public void addIncomeAll()
+	{
+		for(StructureCard c: cards)
+		{
+			c.addIncome();
+		}
+	}
 	public void add(StructureCard card)
 	{
 		cards.add(card);

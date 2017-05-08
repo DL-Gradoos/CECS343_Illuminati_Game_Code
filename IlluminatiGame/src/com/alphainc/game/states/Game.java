@@ -22,6 +22,7 @@ import com.alphainc.game.gameObjects.Deck;
 import com.alphainc.game.gameObjects.IlluminatiCard;
 import com.alphainc.game.gameObjects.StructureCard;
 import com.alphainc.game.gameObjects.PowerStructure;
+import com.alphainc.game.gameObjects.SpecialCard;
 import com.alphainc.game.player.PlayerGUI;
 /**
  * The main game
@@ -40,7 +41,7 @@ public class Game extends BasicGameState implements KeyListener {
 	/** Background */
 	private Image bg;
 	/** List of illumnati cards */
-	private List<StructureCard> illumCard;
+	private List<StructureCard> illumCard, groupCard, currentCenterCards;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	public static Camera camera;
 	/** The players */
@@ -51,95 +52,58 @@ public class Game extends BasicGameState implements KeyListener {
 	private List<PlayerGUI> playerOrder;
 	/** Whose turn it is */
 	private int turn = 0;
-	/** Iluminati Cards */
+	/** Illuminati Cards */
 	private StructureCard ilCards[];
 	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
 	private boolean cameraMovement [];
+	private Deck deck;
 	//Changes card displayed on space press
 	private boolean temp;
+	
+	private boolean attack;
 	public Game(int id) {
 		mID = id;
 	}
 	
 private int counter;
 	@Override
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+	public void init(GameContainer container, StateBasedGame game) throws SlickException 
+	{
 		/** Initialize only when entered into from Menu state */
 		System.out.println("game " + Menu.players);
-		
-//Clean up
-		counter = 0;
+
+
 		if(Menu.players > 0) 
 		{
 			bg = new Image("com/alphainc/res/gui/tabletop.png");
 
 			initIllumCards(container);
+			initGroupCards(container);
 			initPlayers(container);
 			determinePlayerOrder();
 			assignIllumCard();
-			//initCards();
+			initCenterCards(container);
 			
-			
-			ilCards = new IlluminatiCard[8];
-			//Testing illuminati card 1 initialize
-			ilCards[0] = new IlluminatiCard("res/cards/illum/thenetwork.png", "The Network", "special", 10, 9,
-						 new Arrow[] {
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true),
-								 new Arrow(false, null, true)
-						 });
-			ilCards[0].setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105);
-			//ilCards[0].rotate(90);
-			//Illuminati card 2 initialize
-			ilCards[1] = new IlluminatiCard("src/com/alphainc/res/cards/thesocietyofassassins.png", "The Society of Assassins", "special", 10, 9,
-					 new Arrow[] {
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true)
-					 });
-			ilCards[2] = new IlluminatiCard("src/com/alphainc/res/cards/thesocietyofassassins.png", "The Society of Assassins", "special", 10, 9,
-					 new Arrow[] {
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true),
-							 new Arrow(false, null, true)
-					 });
-			
-			ilCards[1].setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105);
-			
-			//ilCards[1].rotate(90);
-			//ilCards[1].rotateToThisAmount(0);
-			//System.out.println("current rotation" + ilCards[1].getRotate());
-			/*ilCards[0].rotate(90);
-			ilCards[0].connect(ilCards[1], 2, 0); //Illum card 0 connects with top arrow to Illum card 1's top arrow
-			ilCards[1].connect(ilCards[2], 1, 0);*/
-			
-			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
-			card = new Image("src/com/alphainc/res/cards/theufos.png").getScaledCopy(0.5F);
-			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
-			card.setRotation(90);
-			//card.setImageColor(0.5f, 0.5f, 0.5f);
-			System.out.println("CARD AFTER: " + card.getWidth() + " " + card.getHeight());
-			card2 = new Image("res/cards/illum/thenetwork.png").getScaledCopy(0.5F);
-			/*card2.rotate(90);
-			System.out.println("CARD 1: " + card.getWidth() + " " + card.getHeight());
-			System.out.println("CARD 2: " + card2.getWidth() + " " + card2.getHeight());*/
-			//test = new StructureCard();
+
 		}
 	}
 
 
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException 
+	{
 		g.translate(camera.getTopLeftX(), camera.getTopLeftY());
 		bg.draw();
-		/* Renders the current players gui */
-		for(int ii = 0; ii < player.length; ii++) {
-			playerOrder.get(ii).render(container, g);
+
+		//Renders uncontrolled group cards
+		for(StructureCard c: currentCenterCards)
+		{
+			c.render(container, g);
 		}
+		/* Renders the current players gui */
+		playerOrder.get(turn).render(container, g);
+		
 //Clean up
 /*		if(counter == 90)
 		{
@@ -172,49 +136,55 @@ private int counter;
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		//Move speed of the camera
-				float moveSpeed = delta * 0.2f;
-				//left
-				if(cameraMovement[0]) {
-					if(camera.getTopLeftX() > 1000)
-						camera.setCurrentTopLeftCoords(1000.999F, camera.getTopLeftY());
-					else
-						camera.adjustCoords(moveSpeed, 0);
-				}
-				//up
-				if(cameraMovement[1]) {
-					if(camera.getTopLeftY() > 600)
-						camera.setCurrentTopLeftCoords(camera.getTopLeftX(), 600.999F);
-					else
-						camera.adjustCoords(0, moveSpeed);
-				}
-				//right
-				if(cameraMovement[2]) {
-					if(camera.getTopLeftX() < -1000)
-						camera.setCurrentTopLeftCoords(-1000.999F, camera.getTopLeftY());
-					else
-						camera.adjustCoords(-moveSpeed, 0);
-				}
-				//down
-				if(cameraMovement[3]) {
-					if(camera.getTopLeftY() < -600)
-						camera.setCurrentTopLeftCoords(camera.getTopLeftX(), -600.999F);
-					else
-						camera.adjustCoords(0, -moveSpeed);
-				}
-				
+		float moveSpeed = delta * 0.3f;
+		//left
+		if(cameraMovement[0]) 
+		{
+			if(camera.getTopLeftX() > 1000){
+				camera.setCurrentTopLeftCoords(1000.999F, camera.getTopLeftY());
+			}
+			else{
+				camera.adjustCoords(moveSpeed, 0);
+			}
+		}
+		//up
+		if(cameraMovement[1]) {
+			if(camera.getTopLeftY() > 600)
+				camera.setCurrentTopLeftCoords(camera.getTopLeftX(), 600.999F);
+			else
+				camera.adjustCoords(0, moveSpeed);
+		}
+		//right
+		if(cameraMovement[2]) {
+			if(camera.getTopLeftX() < -1000)
+				camera.setCurrentTopLeftCoords(-1000.999F, camera.getTopLeftY());
+			else
+				camera.adjustCoords(-moveSpeed, 0);
+		}
+		//down
+		if(cameraMovement[3]) {
+			if(camera.getTopLeftY() < -600)
+				camera.setCurrentTopLeftCoords(camera.getTopLeftX(), -600.999F);
+			else
+				camera.adjustCoords(0, -moveSpeed);
+		}
+
 		
 	}
 
 	@Override
-	public int getID() {
+	public int getID() 
+	{
 		
 		return mID;
 	}
 	
 	@Override
-	public void keyPressed(int key, char c) {
+	public void keyPressed(int key, char c) 
+	{
 		/* Go to next player's turn */
-		if(key == Input.KEY_SPACE) {
+		if(key == Input.KEY_SPACE) 
+		{
 			playerOrder.get(turn).setShouldBeRendered(false);
 			turn = ((turn + 1) > player.length - 1) ? 0 : turn + 1;
 			/*if((turn + 1) > (player.length - 1))	
@@ -222,39 +192,35 @@ private int counter;
 			else
 				turn++;*/
 			playerOrder.get(turn).setShouldBeRendered(true);
-//Clean up
-			//System.out.println("We're connecting 1's top with 2's bottom");
-			/*System.out.println("1. " +ilCards[0].getName() + " Rotation: " + ilCards[0].getRotate());
-			System.out.println("2. " + ilCards[1].getName() + " Rotation: " + ilCards[1].getRotate());*/
-			//temp = true;
-			if(temp)
+			
+//Beginning of player's turn stuff
+			//Adds income to all player's cards, create alert for this
+			playerOrder.get(turn).getPowerStructure().addIncomeAll();
+			
+			int index = (int)(Math.random()*groupCard.size());
+			
+			//Draws random card from main deck and displays to user
+			StructureCard card = groupCard.remove(index);
+			
+			//Tests if card is special, if it is allows user to choose to display face up or down
+			if(card instanceof SpecialCard)
 			{
-				//ilCards[0].rotate(90);
-				temp = false;
+				
 			}
 			else
 			{
-				temp = true;
+				card.setPosition(450 + (currentCenterCards.size()*140), 100);
+				
+				//Alert user it is group card, place in uncontrolled area
+				currentCenterCards.add(card);
+				
 			}
 			
-			
-			
+		
 		}
 		else if(key == Input.KEY_F)
 		{
-			//System.out.println("current rotation" + ilCards[1].getRotate());
-		/*	
-			System.out.println("Incorrect connection.");
-			System.out.println("1. " +ilCards[0].getName() + " Arrow:" 
-			+ ilCards[0].getConnectedArrow() + " " + " Rotation: " + ilCards[0].getRotate());
-			System.out.println("2. " +ilCards[1].getName() + " Arrow:"  
-			+ ilCards[1].getConnectedArrow() + " " + " Rotation: " + ilCards[1].getRotate());*/
-			
-			/*ilCards[0].rotate(90);
-			ilCards[1].setRotation(0);
-			ilCards[2].setRotation(0);
-			ilCards[0].connect(ilCards[1], 1, 0);
-			ilCards[1].connect(ilCards[2], 0, 2);*/
+
 		}
 		if(key == Input.KEY_LEFT || key == Input.KEY_A)
 			cameraMovement[0] = true;
@@ -278,11 +244,14 @@ private int counter;
 			cameraMovement[3] = false;
 	}
 	@Override
-	public void mousePressed(int button, int x, int y) {
-		if(button == Input.MOUSE_LEFT_BUTTON) {
+	public void mousePressed(int button, int x, int y) 
+	{
+		if(button == Input.MOUSE_LEFT_BUTTON) 
+		{
 			for(StructureCard sc : illumCard)
+			{
 				sc.flip();
-			//ilCards[0].flip();
+			}
 		}
 	}
 	
@@ -291,22 +260,24 @@ private int counter;
 	 * Initializes the amount of players from the option chosen in Menu
 	 * @param container The game container
 	 */
-	private void initPlayers(GameContainer container) {
+	private void initPlayers(GameContainer container) 
+	{
 //Clean up
 		//Player GUI's init
 		player = new PlayerGUI[Menu.players];
-		for(int ii = 0; ii < player.length; ii++) {
+		for(int ii = 0; ii < player.length; ii++) 
+		{
 			player[ii] = new PlayerGUI(container, "Player " + (ii + 1), ii);
 		}
 		//Init Camera
 		camera = new Camera();
 		cameraMovement = new boolean[] {false, false, false, false};
-		//Init background image
 	}
 	/**
 	 * "Rolls 2 die" according to how many players there are and assigns turn order
 	 */
-	private void determinePlayerOrder() {
+	private void determinePlayerOrder() 
+	{
 		/* Rolls dice */
 		Random dice = new Random();
 		/* Determines player order */
@@ -346,16 +317,16 @@ private int counter;
 	/**
 	 * Initializes Illuminati Cards
 	 */
-	private void initIllumCards(GameContainer container) {
-		Deck deck = new Deck();
+	private void initIllumCards(GameContainer container) 
+	{
+		deck = new Deck();
 		illumCard = deck.getIlluminatiDeck();
-		for(StructureCard sc : illumCard) {
+		for(StructureCard sc : illumCard) 
+		{
 			sc.setPosition(container.getScreenWidth()/2, container.getScreenHeight()/2 - 105/*container.getWidth() / 2 + 150, container.getHeight() / 2*/);
 			sc.flip();
 		}
-		/*illumCard[0] = new IlluminatiCard("res/illumcards/thebavarianilluminati.png", 
-				"The Bavarian Illuminati", "May make one privileged attack each turn at a cost of 5MB.",
-				10, 9, );*/
+
 	}
 	
 	/**
@@ -370,5 +341,44 @@ private int counter;
 			System.out.println(ps.get(0).getName());
 			player[ii].addPowerStructure(ps);
 		}
+	}
+	private void initGroupCards(GameContainer container)
+	{
+		groupCard = deck.getGroupDeck();
+	}
+	
+	//Uncontrolled groups
+	private void initCenterCards(GameContainer container)
+	{
+		currentCenterCards = new ArrayList<StructureCard>();
+		int i = 0;
+		while(i < 4)
+		{
+			int index = (int)(Math.random()*groupCard.size());
+			StructureCard temp = groupCard.get(index);
+			if(!(temp instanceof SpecialCard))
+			{
+				temp.setPosition(450 + (i*140), 100);
+				temp.flip();
+				currentCenterCards.add(temp);
+				groupCard.remove(index);
+				i++;
+			}
+		}
+	}
+	private void beginAttackToDestroy()
+	{
+//Come back to fix this
+		//The card the user uses to attack
+		StructureCard attacker = null;
+		
+		//The card the user wants to destroy
+		StructureCard defender = null;
+		
+		//Test if the attacker has the defending card in their structure
+		//If they do, the the player may not use that card's transferrable power and may not have an illuminati bonus
+		//Prompt user for transferrable power 
+		//Calculate illuminati bounses, alignments bonus
+		//Reupdate screen with current powers from each
 	}
 }

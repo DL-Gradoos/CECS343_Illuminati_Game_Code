@@ -41,8 +41,10 @@ public class PlayerGUI extends AbstractComponent
 		initSideBar();
 	}
 
-	public void render(GameContainer container, Graphics g) throws SlickException {
-		if(shouldBeRendered) {
+	public void render(GameContainer container, Graphics g) throws SlickException 
+	{
+		if(shouldBeRendered) 
+		{
 			
 			powerStructure.render(container, g);
 			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());
@@ -108,8 +110,13 @@ public class PlayerGUI extends AbstractComponent
 	public boolean isRendered() {
 		return shouldBeRendered;
 	}
-	public void addPowerStructure(PowerStructure ps) {
+	public void addPowerStructure(PowerStructure ps) 
+	{
 		powerStructure = ps;
+	}
+	public PowerStructure getPowerStructure()
+	{
+		return powerStructure;
 	}
 
 	@Override
