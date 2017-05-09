@@ -23,6 +23,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.alphainc.game.Camera;
 import com.alphainc.game.Main;
+import com.alphainc.game.components.CenterCardViewer;
 import com.alphainc.game.components.MessageBox;
 import com.alphainc.game.components.MovableMouseOverArea;
 import com.alphainc.game.crystalcards.Arrow;
@@ -75,8 +76,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private MovableMouseOverArea buttons[];
 	/** Number of actions left */
 	private int actions = 2;
-	/** The four uncontrolled Groups in play */
-	//private StructureCard currentCenterCards[];
+	/** The uncontrolled Groups in play */
+	private CenterCardViewer uncontrolledCards;
 	
 	public Game(int id) {
 		mID = id;
@@ -95,6 +96,11 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			initSideBarButtons(container);
 			initCurrentCenterCards();
 			msgBox.addMessage("THIS IS MORE THAN 30 CHARACTERS WHAT WILL THE PROGRAM DO?");
+			uncontrolledCards = new CenterCardViewer(container, this);
+			for(int ii = 0; ii < 4; ii++)
+				uncontrolledCards.add(groupCard.remove(0));
+			
+			
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
 			/*card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
 			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
@@ -119,7 +125,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		}
 		renderSideBarElements(container, g);
 		msgBox.render(container, g);
-		renderCurrentCenterCards(container, g);
+		//renderCurrentCenterCards(container, g);
+		uncontrolledCards.render(container, g);
 	}
 
 	@Override
@@ -208,6 +215,9 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	
 	@Override
 	public void keyReleased(int key, char c) {
+		if(key == Input.KEY_U)
+			uncontrolledCards.add(groupCard.remove(0));
+		
 		if(key == Input.KEY_LEFT || key == Input.KEY_A)
 			cameraMovement[0] = false;
 		if(key == Input.KEY_UP || key == Input.KEY_W)
@@ -263,6 +273,13 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		//MessageBox Up Arrow
 		if(source == msgBox.getUpArrow())
 			msgBox.scrollUp();
+		
+		//CenterCardViewer Left Arrow
+		if(source == uncontrolledCards.getLeftArrow());
+			//uncontrolledCards.scrollLeft();
+		//CenterCardViewer Right Arrow
+		if(source == msgBox.getUpArrow());
+			//uncontrolledCards.scrollRight();
 	}
 	
 	/**

@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
 
 /**
  * Super class for a card that is part of a structure.
@@ -34,7 +35,7 @@ public class StructureCard extends Card
 	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
 	private int rotated;
 	/** Coords */
-	private int xCoords, yCoords;
+	private float xCoords, yCoords;
 	
 	/**
 	 * The main constructor for a structure card object.
@@ -612,7 +613,7 @@ public class StructureCard extends Card
 					//Sets new position of card
 					if(connectWith % 2 == 0)
 					{
-						int y = 0;
+						float y = 0;
 						//The card is connecting at the top 
 						if(connectWith == 0)
 						{
@@ -626,7 +627,7 @@ public class StructureCard extends Card
 					}
 					else
 					{
-						int x = 0;
+						float x = 0;
 						if(connectWith == 1) //The card is connecting on the right
 						{
 							x = xCoords + getWidth()/2 + card.getWidth() / 2;
@@ -702,10 +703,21 @@ public class StructureCard extends Card
 		xCoords = x;
 		yCoords = y;
 	}
+	
+	public void setPosition(float x, float y) {
+		xCoords = (int) x;
+		yCoords = (int) y;
+	}
+	
 	public void render(GameContainer container, Graphics g) 
 	{
 		scaledCardImage.drawCentered(xCoords, yCoords);
 	}
+	
+	public void render(GUIContext container, Graphics g) {
+		scaledCardImage.drawCentered(xCoords, yCoords);
+	}
+	
 	/**
 	 * Rotates image by specified amount
 	 */

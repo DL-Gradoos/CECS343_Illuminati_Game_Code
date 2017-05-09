@@ -260,6 +260,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
 		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
 	}
+	
 	/**
 	 * Renders the images for the Start popup menu
 	 * 

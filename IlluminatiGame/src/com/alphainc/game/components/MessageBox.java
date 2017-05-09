@@ -188,7 +188,8 @@ public class MessageBox extends AbstractComponent {
 		spacer = 0;
 		for(int ii = 0; ii < 2; ii++) {
 			//-camera.getTopLeftX() + 80, -camera.getTopLeftY() + space
-			arrow[ii].updateLocation(-Game.camera.getTopLeftX() + 15, -Game.camera.getTopLeftY() + 615 + spacer);
+			arrow[ii].updateLocation(-Game.camera.getTopLeftX() + 15,
+					-Game.camera.getTopLeftY() + 615 + spacer);
 			arrow[ii].render(container, g);
 			spacer += 45;
 		}
