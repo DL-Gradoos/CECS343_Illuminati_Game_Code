@@ -227,7 +227,7 @@ public class StructureCard extends Card
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected() && a.getDirection())
+			if(!a.isConnected() && a.getDirection() && a.exists())
 			{
 				return true;
 			}
@@ -242,7 +242,7 @@ public class StructureCard extends Card
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected() && !a.getDirection())
+			if(!a.isConnected() && !a.getDirection() && a.exists())
 			{
 				return true;
 			}
@@ -308,10 +308,11 @@ public class StructureCard extends Card
 	{
 		
 		//Tests if connectWith is an open out arrow and connectTo is an open in arrow
-		if(true/*!arrows[connectWith].isConnected() 
+		if(arrows[connectWith].exists() && card.getArrow(connectTo).exists() 
+				&& !arrows[connectWith].isConnected() 
 				&& arrows[connectWith].getDirection() 
 				&& !card.getArrow(connectTo).getDirection()
-				&& !card.getArrow(connectTo).isConnected()*/)
+				&& !card.getArrow(connectTo).isConnected())
 		{
 
 			//Connects
@@ -642,6 +643,10 @@ public class StructureCard extends Card
 			}
 
 		}
+		else
+		{
+			System.out.println("ERROR. These two cards cannot be connected");
+		}
 	}
 	public int getTransferablePower()
 	{
@@ -760,6 +765,19 @@ public class StructureCard extends Card
 			System.err.println("Could not find card image of card " + name);
 			se.printStackTrace();
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		String s = "Name: " + name + 
+				"\r\nxCoords: " + xCoords + " yCoords: " + yCoords + 
+				"\r\nrotated: " + rotated + "\r\nArrows: " ;
+		for(int i = 0; i < arrows.length; i++)
+		{
+			s = s + i+ ". " +arrows[i].toString() + ", ";
+		}
+		return s;
 	}
 	
 	
