@@ -41,7 +41,7 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	/** UNUSED */
 	private java.awt.Font f;
 	/** UNUSED */
-	private TrueTypeFont x;
+	private TrueTypeFont pcTitle;
 	/** The container the game is in, received from init */
 	private GameContainer container;
 	/** A level (state) of the main game, received from init */
@@ -80,11 +80,8 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 		initTitleScreen();
 		initOptionsMenu();
 		initStartGame();
-		//font = new AngelCodeFont();
-		System.out.printf("WIDTH: %s HEIGHT: %s\n", container.getWidth(), container.getHeight());
-		//font = new AngelCodeFont();
-		f = new java.awt.Font(/*"Segoe UI Light"*/"Arial", java.awt.Font.BOLD, 36);
-		x = new TrueTypeFont(f, false);
+		//System.out.printf("WIDTH: %s HEIGHT: %s\n", container.getWidth(), container.getHeight());
+		
 	}
 
 	@Override
@@ -254,9 +251,11 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	 */
 	private void initStartGame() throws SlickException {
 		startGamePlayerNum = new Image(imagePath[2] + "options_menu_c.png").getScaledCopy(0.4F);
-		pc = new PlayerCounter(container, 546, 370, 192, 48);
+		f = new java.awt.Font(/*"Segoe UI Light"*/"Arial", java.awt.Font.BOLD, 30);
+		pcTitle = new TrueTypeFont(f, true);
+		pc = new PlayerCounter(container, 546, 355, 192, 48);
 		startGame = new Image(imagePath[2] + "go_PLACEHOLDER.png");
-		startGameMouseOver = new MouseOverArea(container, startGame, 546, 400, startGame.getWidth(), startGame.getHeight(), this);
+		startGameMouseOver = new MouseOverArea(container, startGame, 576, 405, startGame.getWidth(), startGame.getHeight(), this);
 		startGameMouseOver.setNormalColor(new Color(1, 1, 1, 0.5F));
 		startGameMouseOver.setMouseOverColor(new Color(1, 1, 1, 1.0F));
 	}
@@ -270,6 +269,8 @@ public class Menu extends BasicGameState implements ComponentListener, MouseList
 	private void renderStartGame(Graphics g) throws SlickException {
 		g.drawImage(startGamePlayerNum, 20 + container.getWidth() / 4.0F, -20 + container.getHeight() / 4.0F);
 		pc.render(container, g);
+		pcTitle.drawString(505, 275, "Choose the number", Color.black);
+		pcTitle.drawString(565, 310, "of players:", Color.black);
 		startGameMouseOver.render(container, g);
 		//playerCount.render(container, g);
 	}

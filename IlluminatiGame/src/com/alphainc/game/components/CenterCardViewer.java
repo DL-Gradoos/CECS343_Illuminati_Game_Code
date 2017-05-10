@@ -57,14 +57,21 @@ public class CenterCardViewer extends AbstractComponent {
 				cards.get(ii).setPosition(-Game.camera.getTopLeftX() + xCoords + spacer,
 						-Game.camera.getTopLeftY() + yCoords);
 				cards.get(ii).render(container, g);
+				//xCoords - (130 / 2), yCoords - (87 / 2)
+				cardClick[ii - rowNum].updateLocation(-Game.camera.getTopLeftX() + (xCoords - (130 / 2)) + spacer,
+						-Game.camera.getTopLeftY() + (yCoords - (87 / 2)));
+				cardClick[ii - rowNum].render(container, g);
 				spacer += 150;
 			}
-			cardClick[0].render(container, g);
-			cardClick[1].render(container, g);
+			for(int ii = 0; ii < 2; ii++) {
+				
+			}
 		} else if(cards.size() == 1) {
 			cards.get(0).setPosition(-Game.camera.getTopLeftX() + xCoords,
 					-Game.camera.getTopLeftY() + yCoords);
 			cards.get(0).render(container, g);
+			cardClick[0].updateLocation(-Game.camera.getTopLeftX() + (xCoords - (130 / 2)),
+					-Game.camera.getTopLeftY() + (yCoords - (87 / 2.0f)));
 			cardClick[0].render(container, g);
 		}
 		spacer = 0;
