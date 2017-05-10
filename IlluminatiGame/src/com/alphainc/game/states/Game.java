@@ -79,6 +79,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** The uncontrolled Groups in play */
 	private CenterCardViewer uncontrolledCards;
 	
+	
 	public Game(int id) {
 		mID = id;
 	}
@@ -203,7 +204,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		if(key == Input.KEY_DOWN || key == Input.KEY_S)
 			cameraMovement[3] = true;
 		
-		
+		if(key == Input.KEY_P)
+			playerOrder.get(turn).addSpecialCard(groupCard.remove(0));
 		
 		if(key == Input.KEY_O)
 			msgBox.scrollUp();
@@ -234,17 +236,6 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			//ilCards[0].flip();
 			
 		}
-//		System.out.printf("%s < x < %s\n%s < y < %s\n", -camera.getTopLeftX() + 100, 
-//				-camera.getTopLeftX() + 100 + buttonImage[0].getWidth(),
-//				-camera.getTopLeftY() + 300,
-//				-camera.getTopLeftY() + 300 + buttonImage[0].getHeight());
-//		System.out.println("");
-//		if(button == Input.MOUSE_LEFT_BUTTON && x > (/*-camera.getTopLeftX() + */100) && x < (/*-camera.getTopLeftX() + */100 + buttonImage[0].getWidth())
-//				&& y > (/*-camera.getTopLeftY() + */300) && y < (/*-camera.getTopLeftY() + */300 + buttonImage[0].getHeight())) {
-//			System.out.println(true);
-//		} else {
-//			System.out.println(false);
-//		}
 	}
 	
 	@Override
@@ -283,6 +274,19 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			System.out.println("LEFT CARD INDEX: " + uncontrolledCards.getLeftCardIndex());
 		if(source == uncontrolledCards.getRightClickableArea())
 			System.out.println("RIGHT CARD INDEX: " + uncontrolledCards.getRightCardIndex());
+		
+		for(int ii = 0; ii < playerOrder.size(); ii++) {
+			//CenterCardViewer Left Arrow
+			if(source == playerOrder.get(ii).getSpecialCardViewer().getLeftArrow())
+				playerOrder.get(ii).getSpecialCardViewer().scrollLeft();
+			//CenterCardViewer Right Arrow
+			if(source == playerOrder.get(ii).getSpecialCardViewer().getRightArrow())
+				playerOrder.get(ii).getSpecialCardViewer().scrollRight();
+			if(source == playerOrder.get(ii).getSpecialCardViewer().getLeftClickableArea())
+				System.out.println("LEFT CARD INDEX: " + playerOrder.get(ii).getSpecialCardViewer().getLeftCardIndex());
+			if(source == playerOrder.get(ii).getSpecialCardViewer().getRightClickableArea())
+				System.out.println("RIGHT CARD INDEX: " + playerOrder.get(ii).getSpecialCardViewer().getRightCardIndex());
+		}
 	}
 	
 	/**
@@ -293,7 +297,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		//Player GUI's init
 		player = new PlayerGUI[Menu.playerCountData.getPlayerCount()];
 		for(int ii = 0; ii < player.length; ii++) {
-			player[ii] = new PlayerGUI(container, "Player " + (ii + 1), ii);
+			player[ii] = new PlayerGUI(container, "Player " + (ii + 1), ii, this);
 		}
 		//Init Camera
 		camera = new Camera();

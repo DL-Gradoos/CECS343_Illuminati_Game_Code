@@ -9,6 +9,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.AbstractComponent;
@@ -22,7 +23,7 @@ import com.alphainc.game.states.Menu;
  * @author Daniel
  *
  */
-public class MessageBox extends AbstractComponent {
+public class MessageBox extends AbstractComponent/* implements MouseListener*/ {
 	/** All messages present in the game, any message older than index 100 will be deleted. */
 	private List<String> messages;
 	/** The MessageBox background */
@@ -49,6 +50,8 @@ public class MessageBox extends AbstractComponent {
 	private int xRender, yRender;
 	/** Listener */
 	private ComponentListener listener;
+	/** For scrolling */
+	private boolean scroll;
 	
 	/**
 	 * Constructor
@@ -178,7 +181,8 @@ public class MessageBox extends AbstractComponent {
 	@Override
 	public void render(GUIContext container, Graphics g) throws SlickException {
 		//Display background, display messages i -> i + TEXT_AMOUNT
-		bg.draw(0, 0);
+		//bg.draw(0, 0);
+		//g.fillRect(50, 600, 230, 100);
 		spacer = 0;
 		for(int ii = rowNum; ii < rowNum + TEXT_AMOUNT; ii++) {
 			customFont.drawString(-Game.camera.getTopLeftX() + 50,
@@ -225,5 +229,23 @@ public class MessageBox extends AbstractComponent {
 	public int getHeight() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	@Override
+	public void mouseWheelMoved(int change) {
+		if(scroll) {
+			if(change > 0)
+				scrollUp();
+			else if(change < 0)
+				scrollDown();
+		}
+	}
+	
+	@Override
+	public void mousePressed(int button, int mx, int my) {
+		if(button == 0 && (mx >= 50 && mx <= 280) && (my >= 600 && my <= 700))
+			scroll = true;
+		else
+			scroll = false;
 	}
 }

@@ -39,7 +39,7 @@ public class PreGame extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		timePassed += delta;
-		if(timePassed > 4000)
+		if(timePassed > 3500)
 			game.enterState(Main.MENU, new FadeOutTransition(), new FadeInTransition());
 	}
 

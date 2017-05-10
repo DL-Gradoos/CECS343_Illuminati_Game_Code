@@ -82,15 +82,15 @@ public class CenterCardViewer extends AbstractComponent {
 			arrow[ii].render(container, g);
 			spacer += 360;
 		}
-		customFont.drawString(-Game.camera.getTopLeftX() + 390,
-					-Game.camera.getTopLeftY() + 530, name, Color.white);
+		customFont.drawString(-Game.camera.getTopLeftX() + (xCoords - 60),
+					-Game.camera.getTopLeftY() + (yCoords - 85), name, Color.white);
 		/*for(StructureCard sc : cards) {
 			sc.render(container, g);
 		}*/
 	}
 	
 	public void add(StructureCard c) {
-		cards.add(0, c);
+		cards.add(c);
 	}
 	
 	public StructureCard remove(int index) {
@@ -133,16 +133,13 @@ public class CenterCardViewer extends AbstractComponent {
 			rowNum = 0;
 		else
 			rowNum--;
-		System.out.println(rowNum);
 	}
 	
 	/**
 	 * Scrolls view right
 	 */
 	public void scrollRight() {
-		//System.out.println(rowNum + " " + messages.get(rowNum + 4).equals(""));
-		//if(!cards.get(rowNum + MAX_CARDS).equals(null))
-		//System.out.println("IS ROW NUM + 1 > 4???" + (rowNum + 1 >= cards.size() - 1));
+		//System.out.println(rowNum + " | SIZE: " + cards.size());
 		if(!(rowNum + 1 >= cards.size() - 1))
 			rowNum++;
 		
@@ -163,7 +160,7 @@ public class CenterCardViewer extends AbstractComponent {
 			rightArrow = new Image("res/centerviewer/rightarrow.png").getScaledCopy(0.4f);
 			clickableCard = new Image("res/centerviewer/cardclick.png");
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
+			System.err.print("COULD NOT LOAD ARROWS OR CLICKABLE CARD");
 			e.printStackTrace();
 		}
 		arrow = new MovableMouseOverArea[2];
@@ -193,16 +190,22 @@ public class CenterCardViewer extends AbstractComponent {
 		customFont = new TrueTypeFont(segoeUIFont, true);
 	}
 	
-	/** Unused **/
 	@Override
 	public void setLocation(int x, int y) {
 		xCoords = x;
 		yCoords = y;
 	}
+	
 	@Override
-	public int getX() {return 0;}
+	public int getX() {
+		return xCoords;
+	}
+	
 	@Override
-	public int getY() {return 0;}
+	public int getY() {
+		return yCoords;
+	}
+	
 	@Override
 	public int getWidth() {return 0;}
 	@Override

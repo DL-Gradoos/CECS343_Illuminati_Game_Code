@@ -9,7 +9,9 @@ import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.MouseOverArea;
 
+import com.alphainc.game.components.CenterCardViewer;
 import com.alphainc.game.crystalcards.PowerStructure;
+import com.alphainc.game.crystalcards.StructureCard;
 import com.alphainc.game.states.Game;
 /**
  * This class provides options for the player to take, also renders
@@ -24,6 +26,8 @@ public class PlayerGUI extends AbstractComponent {
 	private String mPlayerName;
 	/** Player id */
 	private int mPlayerID;
+	/** Component Listener */
+	private ComponentListener listener;
 	/** GUI Sidebar background */
 	private Image sideBar;
 	/** The player num */
@@ -34,14 +38,21 @@ public class PlayerGUI extends AbstractComponent {
 	private boolean shouldBeRendered = false;
 	/** The power structure tied to the player */
 	private PowerStructure powerStructure;
+	/** The special cards the user owns */
+	private CenterCardViewer specialCards;
+	/** Container passed */
+	private GameContainer container;
 	
 	
-	public PlayerGUI(GameContainer container, String playerName, int playerId) {
+	public PlayerGUI(GameContainer container, String playerName, int playerId, ComponentListener listener) {
 		super(container);
+		this.container = container;
+		addListener(this.listener = listener);
 		mPlayerName = playerName;
 		mPlayerID = playerId;
 		initSideBar();
 		initButtons();
+		initSpecialCardViewer();
 	}
 	
 	public void render(GameContainer container, Graphics g) throws SlickException {
@@ -49,6 +60,7 @@ public class PlayerGUI extends AbstractComponent {
 			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());
 			g.drawImage(playerNum, -Game.camera.getTopLeftX() + 80, -Game.camera.getTopLeftY() + 50);
 			powerStructure.render(container, g);
+			specialCards.render(container, g);
 		}
 	}
 	
@@ -102,6 +114,10 @@ public class PlayerGUI extends AbstractComponent {
 		}
 	}
 	
+	private void initSpecialCardViewer() {
+		specialCards = new CenterCardViewer("Special Cards", 1000, 615, container, listener);
+	}
+	
 	private void initButtons() {
 		
 	}
@@ -128,6 +144,22 @@ public class PlayerGUI extends AbstractComponent {
 	
 	public void addPowerStructure(PowerStructure ps) {
 		powerStructure = ps;
+	}
+	
+	public void addSpecialCard(StructureCard c) {
+		specialCards.add(c);
+	}
+	
+	public StructureCard removeSpecialCard(int index) {
+		return specialCards.remove(index);
+	}
+	
+	public StructureCard getSpecialCard(int index) {
+		return specialCards.get(index);
+	}
+	
+	public CenterCardViewer getSpecialCardViewer() {
+		return specialCards;
 	}
 	
 	public int getPlayerID() {
