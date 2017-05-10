@@ -94,11 +94,9 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			determinePlayerOrder();
 			assignIllumCard();
 			initSideBarButtons(container);
-			initCurrentCenterCards();
+			initCurrentCenterCards(container);
 			msgBox.addMessage("THIS IS MORE THAN 30 CHARACTERS WHAT WILL THE PROGRAM DO?");
-			uncontrolledCards = new CenterCardViewer(container, this);
-			for(int ii = 0; ii < 4; ii++)
-				uncontrolledCards.add(groupCard.remove(0));
+			
 			
 			
 			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
@@ -275,11 +273,16 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			msgBox.scrollUp();
 		
 		//CenterCardViewer Left Arrow
-		if(source == uncontrolledCards.getLeftArrow());
-			//uncontrolledCards.scrollLeft();
+		if(source == uncontrolledCards.getLeftArrow())
+			uncontrolledCards.scrollLeft();
 		//CenterCardViewer Right Arrow
-		if(source == msgBox.getUpArrow());
-			//uncontrolledCards.scrollRight();
+		if(source == uncontrolledCards.getRightArrow())
+			uncontrolledCards.scrollRight();
+		
+		if(source == uncontrolledCards.getLeftClickableArea())
+			System.out.println("LEFT CARD INDEX: " + uncontrolledCards.getLeftCardIndex());
+		if(source == uncontrolledCards.getRightClickableArea())
+			System.out.println("RIGHT CARD INDEX: " + uncontrolledCards.getRightCardIndex());
 	}
 	
 	/**
@@ -420,10 +423,11 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		}
 	}
 	
-	private void initCurrentCenterCards() {
-		currentCenterCards = new ArrayList<StructureCard>();
+	private void initCurrentCenterCards(GameContainer container) {
+		uncontrolledCards = new CenterCardViewer("Uncontrolled Groups", 450, 615, container, this);
 		for(int ii = 0; ii < 4; ii++)
-			currentCenterCards.add(groupCard.remove(ii));
+			uncontrolledCards.add(groupCard.remove(0));
+		//uncontrolledCards.setLocation(450, 615);
 	}
 	
 	private void renderCurrentCenterCards(GameContainer container, Graphics g) {
