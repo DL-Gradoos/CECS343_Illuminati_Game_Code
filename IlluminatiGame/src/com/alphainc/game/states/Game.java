@@ -45,11 +45,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private static int mID;
 	/** not used yet */
 	private boolean playerOrderRunning = true;
-	/** Testing stuff */
-	private StructureCard test;
-	private Image card, card2;
 	/** Background */
-	private Image bg;
+	private Image bg[];
 	/** List of illumnati cards */
 	private List<StructureCard> illumCard, groupCard, currentCenterCards;
 	/** When shifting the camera, keeps gui locked to side of screen */
@@ -64,6 +61,8 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	private int turn = 0;
 	/** The previous turn */
 	private int prevTurn;
+	
+	
 	/** Boolean for allowing camera movement 0 = left, 1 = up, 2 = right, 3 = down*/
 	private boolean cameraMovement[];
 	/** Deck of cards */
@@ -97,27 +96,13 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			initSideBarButtons(container);
 			initCurrentCenterCards(container);
 			msgBox.addMessage("THIS IS MORE THAN 30 CHARACTERS WHAT WILL THE PROGRAM DO?");
-			
-			
-			
-			/** TESTING IMAGES, CAN DELETE IF YOU WANT */
-			/*card = new Image("res/cards/thesocietyofassassins.png").getScaledCopy(0.5F);
-			System.out.println("CARD BEFORE: " + card.getWidth() + " " + card.getHeight());
-			card.setRotation(90);
-			card.setImageColor(0.5f, 0.5f, 0.5f);
-			System.out.println("CARD AFTER: " + card.getWidth() + " " + card.getHeight());
-			card2 = new Image("res/cards/thenetwork.png").getScaledCopy(0.5F);*/
-			/*card2.rotate(90);
-			System.out.println("CARD 1: " + card.getWidth() + " " + card.getHeight());
-			System.out.println("CARD 2: " + card2.getWidth() + " " + card2.getHeight());*/
-			//test = new StructureCard();
 		}
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		g.translate(camera.getTopLeftX(), camera.getTopLeftY());
-		bg.draw();
+		renderBackground();
 		/* Renders the current players gui */
 		for(int ii = 0; ii < player.length; ii++) {
 			playerOrder.get(ii).render(container, g);
@@ -240,22 +225,31 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	
 	@Override
 	public void componentActivated(AbstractComponent source) {
-		//Attack
+		//Attack to Control
 		if(source == buttons[0]) {
 			
 		}
-		//Transfer Money
+		//Attack to Destroy
 		if(source == buttons[1]) {
 			
 		}
-		//Move a Group
+		//Attack to Neutralize
 		if(source == buttons[2]) {
 			
 		}
-		//Give a Group Away
+		//Transfer Money
 		if(source == buttons[3]) {
 			
 		}
+		//Move Group
+		if(source == buttons[4]) {
+			
+		}
+		//Give a Group Away
+		if(source == buttons[5]) {
+			
+		}
+		
 		//MessageBox Down Arrow
 		if(source == msgBox.getDownArrow())
 			msgBox.scrollDown();
@@ -304,13 +298,29 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		cameraMovement = new boolean[] {false, false, false, false};
 		//Init background image
 		try {
-			bg = new Image("res/gui/tabletop.png");
+			bg = new Image[9];
+			for(int ii = 0; ii < 9; ii++) {
+				bg[ii] = new Image("res/gui/tabletop.png");
+			}
 		} catch (SlickException e) {
 			System.err.println("COULD NOT LOAD IMAGE");
 			e.printStackTrace();
 		}
 		prevTurn = player.length - 1;
 	}
+	
+	private void renderBackground() {
+		bg[0].draw(-1280, -720);
+		bg[1].draw(0, -720);
+		bg[2].draw(1280, -720);
+		bg[3].draw(-1280, 0);
+		bg[4].draw(0, 0);
+		bg[5].draw(1280, 0);
+		bg[6].draw(-1280, 720);
+		bg[7].draw(0, 720);
+		bg[8].draw(1280, 720);
+	}
+	
 	/**
 	 * "Rolls 2 die" according to how many players there are and assigns turn order
 	 */
@@ -400,18 +410,51 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	}
 	
 	private void initSideBarButtons(GameContainer container) {
-		buttonImage = new Image[4];
-		buttons = new MovableMouseOverArea[4];
+		buttonImage = new Image[6];
+		buttons = new MovableMouseOverArea[6];
 		try {
+			buttonImage[0] = new Image("res/gui/attacktocontrol.png").getScaledCopy(0.3F);
+			buttonImage[1] = new Image("res/gui/attacktodestroy.png").getScaledCopy(0.3F);
+			buttonImage[2] = new Image("res/gui/attacktoneutralize.png").getScaledCopy(0.3F);
+			buttonImage[3] = new Image("res/gui/transfermoney.png").getScaledCopy(0.3F);
+			buttonImage[4] = new Image("res/gui/moveagroup.png").getScaledCopy(0.3F);
+			buttonImage[5] = new Image("res/gui/givegroupaway.png").getScaledCopy(0.3F);
 			int space = 300;
-			for(int ii = 0; ii < 4; ii++) {
-				buttonImage[ii] = new Image("res/gui/attack.png").getScaledCopy(0.3F);
-				buttons[ii] = new MovableMouseOverArea(container, buttonImage[ii], (int) (-camera.getTopLeftX() + 100), (int) (-camera.getTopLeftY() + space), buttonImage[ii].getWidth(),
-						buttonImage[ii].getHeight(), this);
-				buttons[ii].setNormalColor(new Color(1, 1, 1, 0.5F));
-				buttons[ii].setMouseOverColor(new Color(1, 1, 1, 1.0F));
-				space += 50;
-			}
+			buttons[0] = new MovableMouseOverArea(container, buttonImage[0], (int) (-camera.getTopLeftX() + 60),
+					(int) (-camera.getTopLeftY() + 150), buttonImage[0].getWidth(),
+					buttonImage[0].getHeight(), this);
+			buttons[0].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[0].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
+			buttons[1] = new MovableMouseOverArea(container, buttonImage[1], (int) (-camera.getTopLeftX() + 60),
+					(int) (-camera.getTopLeftY() + 225), buttonImage[1].getWidth(),
+					buttonImage[1].getHeight(), this);
+			buttons[1].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[1].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
+			buttons[2] = new MovableMouseOverArea(container, buttonImage[2], (int) (-camera.getTopLeftX() + 50),
+					(int) (-camera.getTopLeftY() + 300), buttonImage[2].getWidth(),
+					buttonImage[2].getHeight(), this);
+			buttons[2].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[2].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
+			buttons[3] = new MovableMouseOverArea(container, buttonImage[3], (int) (-camera.getTopLeftX() + 60),
+					(int) (-camera.getTopLeftY() + 375), buttonImage[3].getWidth(),
+					buttonImage[3].getHeight(), this);
+			buttons[3].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[3].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
+			buttons[4] = new MovableMouseOverArea(container, buttonImage[4], (int) (-camera.getTopLeftX() + 70),
+					(int) (-camera.getTopLeftY() + 450), buttonImage[4].getWidth(),
+					buttonImage[4].getHeight(), this);
+			buttons[4].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[4].setMouseOverColor(new Color(1, 1, 1, 1.0F));
+			
+			buttons[5] = new MovableMouseOverArea(container, buttonImage[5], (int) (-camera.getTopLeftX() + 40),
+					(int) (-camera.getTopLeftY() + 525), buttonImage[5].getWidth(),
+					buttonImage[5].getHeight(), this);
+			buttons[5].setNormalColor(new Color(1, 1, 1, 0.5F));
+			buttons[5].setMouseOverColor(new Color(1, 1, 1, 1.0F));
 		} catch (SlickException e) {
 			System.err.println("SIDE BAR IMAGES NOT LOADED");
 			e.printStackTrace();
@@ -419,12 +462,25 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	}
 	
 	private void renderSideBarElements(GameContainer container, Graphics g) {
-		int space = 300;
+		buttons[0].updateLocation(-camera.getTopLeftX() + 60, -camera.getTopLeftY() + 150);
+		buttons[0].render(container, g);
+		buttons[1].updateLocation(-camera.getTopLeftX() + 60, -camera.getTopLeftY() + 225);
+		buttons[1].render(container, g);
+		buttons[2].updateLocation(-camera.getTopLeftX() + 50, -camera.getTopLeftY() + 300);
+		buttons[2].render(container, g);
+		buttons[3].updateLocation(-camera.getTopLeftX() + 60, -camera.getTopLeftY() + 375);
+		buttons[3].render(container, g);
+		buttons[4].updateLocation(-camera.getTopLeftX() + 70, -camera.getTopLeftY() + 450);
+		buttons[4].render(container, g);
+		buttons[5].updateLocation(-camera.getTopLeftX() + 40, -camera.getTopLeftY() + 525);
+		buttons[5].render(container, g);
+		
+		/*int space = 300;
 		for(int ii = 0; ii < buttons.length; ii++) {
 			buttons[ii].updateLocation(-camera.getTopLeftX() + 80, -camera.getTopLeftY() + space);
 			buttons[ii].render(container, g);
 			space += 50;
-		}
+		}*/
 	}
 	
 	private void initCurrentCenterCards(GameContainer container) {
