@@ -54,7 +54,10 @@ public class PlayerGUI extends AbstractComponent {
 		initButtons();
 		initSpecialCardViewer();
 	}
-	
+	public PowerStructure getPowerStructure()
+	{
+		return powerStructure;
+	}
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		if(shouldBeRendered) {
 			g.drawImage(sideBar, -Game.camera.getTopLeftX(), -Game.camera.getTopLeftY());

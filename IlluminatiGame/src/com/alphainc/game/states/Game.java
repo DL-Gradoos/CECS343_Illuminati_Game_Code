@@ -48,7 +48,7 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 	/** Background */
 	private Image bg[];
 	/** List of illumnati cards */
-	private List<StructureCard> illumCard, groupCard, currentCenterCards;
+	private List<StructureCard> illumCard, groupCard, specialCard, currentCenterCards;
 	/** When shifting the camera, keeps gui locked to side of screen */
 	public static Camera camera;
 	/** The players */
@@ -196,6 +196,19 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			msgBox.scrollUp();
 		if(key == Input.KEY_L)
 			msgBox.scrollDown();
+		if(key == Input.KEY_C)
+		{
+			int connect = (int)(Math.random()*4);
+			int r = (int)(Math.random()*groupCard.size());
+			int r2 = (int)(Math.random() * playerOrder.get(turn).getPowerStructure().size());
+			StructureCard card = groupCard.remove(r);
+			card.removeConnections();
+			playerOrder.get(turn).getPowerStructure().removeExIl();
+			playerOrder.get(turn).getPowerStructure().get(0).removeConnections();
+			playerOrder.get(turn).getPowerStructure().get(0).connect(card, card.getOpenInArrow(), connect);
+			playerOrder.get(turn).getPowerStructure().add(card);
+			
+		}
 	}
 	
 	@Override
@@ -460,7 +473,12 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Renders Side bar elements
+	 * 
+	 * @param container Game Container
+	 * @param g Graphics object
+	 */
 	private void renderSideBarElements(GameContainer container, Graphics g) {
 		buttons[0].updateLocation(-camera.getTopLeftX() + 60, -camera.getTopLeftY() + 150);
 		buttons[0].render(container, g);
@@ -474,7 +492,6 @@ public class Game extends BasicGameState implements ComponentListener, KeyListen
 		buttons[4].render(container, g);
 		buttons[5].updateLocation(-camera.getTopLeftX() + 40, -camera.getTopLeftY() + 525);
 		buttons[5].render(container, g);
-		
 		/*int space = 300;
 		for(int ii = 0; ii < buttons.length; ii++) {
 			buttons[ii].updateLocation(-camera.getTopLeftX() + 80, -camera.getTopLeftY() + space);

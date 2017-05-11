@@ -7,21 +7,17 @@ package com.alphainc.game.crystalcards;
  */
 public class Arrow 
 {
-	/**The card this arrow is on.*/
-	private StructureCard card;
 	/**Whether or not this arrow is connected to anything.*/
 	private boolean connected;
 	/**The arrow this arrow is connected to.*/
 	private Arrow connectedTo;
 	/**The direction the arrow points, true for out, false for in.*/
 	private boolean direction;
-	/** Determines if this arrow exists or not */
+	/**Determines if this arrow exists or not*/
 	private boolean exists;
 	
 	/**
 	 * Constructor for an arrow object.
-	 * @param location The location of this arrow on a card.
-	 * @param card The card this arrow is located on.
 	 * @param connected Whether or not the arrow is connected to something else.
 	 * @param connectedTo The arrow it is connecting to.
 	 * @param direction The direction the arrow points, true if the arrow points outwards, false if the arrow points inward.
@@ -35,14 +31,12 @@ public class Arrow
 	}
 	/**
 	 * Overloaded constructor for this arrow. The arrow is unconnected by default.
-	 * @param location The location of this arrow on a card.
-	 * @param card The card this arrow is located on.
 	 * @param direction The direction the arrow the points, true for out, false for in.
 	 */
-	/*public Arrow(StructureCard card, boolean direction)
+	public Arrow(boolean direction)
 	{
-		this(card, false, null, direction);
-	}*/
+		this(true, false, null, direction);
+	}
 	
 	/**
 	 * Sets what this arrow is connected to.
@@ -65,15 +59,6 @@ public class Arrow
 	}
 
 	/**
-	 * Gets the card this arrow is on.
-	 * @return The card this arrow is on.
-	 */
-	public StructureCard getCard()
-	{
-		return card;
-	}
-	
-	/**
 	 * Gets whether or not this arrow is connected.
 	 * @return True if the arrow is connected to something, false otherwise.
 	 */
@@ -92,20 +77,16 @@ public class Arrow
 	}
 	
 	/**
-	 * Returns the card this arrow is connected to.
-	 * @return The card this arrow is connected to.
-	 */
-	public StructureCard getCardConnectedTo()
-	{
-		return connectedTo.getCard();
-	}
-	
-	/**
 	 * Gets which way this arrow is facing, true for out, false for in.
 	 * @return True if this arrow faces out, false if this arrow is facing inward.
 	 */
 	public boolean getDirection()
 	{
 		return direction;
+	}
+	
+	public boolean exists()
+	{
+		return exists;
 	}
 }

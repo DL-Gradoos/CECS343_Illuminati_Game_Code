@@ -35,7 +35,7 @@ public class StructureCard extends Card
 	private int cardWidth, cardHeight, scaledCardWidth, scaledCardHeight;
 	private int rotated;
 	/** Coords */
-	private float xCoords, yCoords;
+	private int xCoords, yCoords;
 	
 	/**
 	 * The main constructor for a structure card object.
@@ -199,16 +199,16 @@ public class StructureCard extends Card
 	 * Gets the first open in arrow.
 	 * @return The first open inward-facing arrow this card has or null if there are no open arrows.
 	 */
-	public Arrow getOpenInArrow()
+	public int getOpenInArrow()
 	{
-		for(Arrow a: arrows)
+		for(int i = 0; i < arrows.length; i++)
 		{
-			if(!a.isConnected() && !a.getDirection())
+			if(!arrows[i].isConnected() && !arrows[i].getDirection() && arrows[i].exists())
 			{
-				return a;
+				return i;
 			}
 		}
-		return null;
+		return -1;
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class StructureCard extends Card
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected() && a.getDirection())
+			if(!a.isConnected() && a.getDirection() && a.exists())
 			{
 				return true;
 			}
@@ -243,7 +243,7 @@ public class StructureCard extends Card
 	{
 		for(Arrow a: arrows)
 		{
-			if(!a.isConnected() && !a.getDirection())
+			if(!a.isConnected() && !a.getDirection() && a.exists())
 			{
 				return true;
 			}
@@ -298,7 +298,14 @@ public class StructureCard extends Card
 			a.removeConnection();
 		}
 	}*/
-	
+	public void removeConnections()
+	{
+		for(Arrow a: arrows)
+		{
+			a.removeConnection();
+		}
+		
+	}
 	/**
 	 * Connects this card's arrow to another card's arrow.
 	 * @param card The card you're connecting to.
@@ -309,10 +316,11 @@ public class StructureCard extends Card
 	{
 		
 		//Tests if connectWith is an open out arrow and connectTo is an open in arrow
-		if(true/*!arrows[connectWith].isConnected() 
+		if(arrows[connectWith].exists() && card.getArrow(connectTo).exists() 
+				&& !arrows[connectWith].isConnected() 
 				&& arrows[connectWith].getDirection() 
 				&& !card.getArrow(connectTo).getDirection()
-				&& !card.getArrow(connectTo).isConnected()*/)
+				&& !card.getArrow(connectTo).isConnected())
 		{
 
 			//Connects
@@ -613,7 +621,7 @@ public class StructureCard extends Card
 					//Sets new position of card
 					if(connectWith % 2 == 0)
 					{
-						float y = 0;
+						int y = 0;
 						//The card is connecting at the top 
 						if(connectWith == 0)
 						{
@@ -627,7 +635,7 @@ public class StructureCard extends Card
 					}
 					else
 					{
-						float x = 0;
+						int x = 0;
 						if(connectWith == 1) //The card is connecting on the right
 						{
 							x = xCoords + getWidth()/2 + card.getWidth() / 2;
@@ -642,6 +650,10 @@ public class StructureCard extends Card
 				}
 			}
 
+		}
+		else
+		{
+			System.out.println("ERROR. These two cards cannot be connected");
 		}
 	}
 	public int getTransferablePower()
@@ -695,7 +707,7 @@ public class StructureCard extends Card
 	 */
 	public Image getImage(int choice) {
 		
-		return scaledCardImage;
+		return cardImage;
 	}
 	
 	public void setPosition(int x, int y) 
@@ -712,6 +724,7 @@ public class StructureCard extends Card
 	public void render(GameContainer container, Graphics g) 
 	{
 		scaledCardImage.drawCentered(xCoords, yCoords);
+
 	}
 	
 	public void render(GUIContext container, Graphics g) {
@@ -771,6 +784,19 @@ public class StructureCard extends Card
 			System.err.println("Could not find card image of card " + name);
 			se.printStackTrace();
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		String s = "Name: " + name + 
+				"\r\nxCoords: " + xCoords + " yCoords: " + yCoords + 
+				"\r\nrotated: " + rotated + "\r\nArrows: " ;
+		for(int i = 0; i < arrows.length; i++)
+		{
+			s = s + i+ ". " +arrows[i].toString() + ", ";
+		}
+		return s;
 	}
 	
 	

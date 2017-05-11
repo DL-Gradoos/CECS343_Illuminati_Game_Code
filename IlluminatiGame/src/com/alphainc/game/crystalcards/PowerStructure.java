@@ -38,4 +38,15 @@ public class PowerStructure {
 	public void add(StructureCard card) {
 		cards.add(card);
 	}
+	
+	public void removeExIl(){
+		for(int i = cards.size()-1; i > 0; i--)
+		{
+			cards.remove(i);
+		}
+	}
+	
+	public int size() {
+		return cards.size();
+	}
 }
